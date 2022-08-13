@@ -68,7 +68,6 @@ const Home = () => {
       </div>
 
       <Divider />
-      {/* Footer */}
     </div>
   );
 };
