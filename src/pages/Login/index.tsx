@@ -1,8 +1,74 @@
 import { useDocumentTitle } from "../../hooks";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { validationSchema } from "./validations/Validations";
+
+interface FormValues {
+  email: string;
+  password: string;
+}
 
 const Login = () => {
   useDocumentTitle("Login | Pelajarin");
-  return <div>Login</div>;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<FormValues>({ resolver: yupResolver(validationSchema) });
+
+  const onSubmit = handleSubmit((data) => console.log(data));
+
+  const formDetails = [
+    {
+      displayName: "Email",
+      inputName: "email",
+      type: "email",
+      placeholder: "Enter your email",
+      error: errors?.email?.message
+    },
+    {
+      displayName: "Password",
+      inputName: "password",
+      type: "password",
+      placeholder: "Enter your password",
+      error: errors?.password?.message
+    }
+  ];
+
+  return (
+    <div className="px-8 py-16">
+      <p className="text-center text-xl font-bold mb-10">
+        Log in and Pelajarin all the things inside :)
+      </p>
+      {/* Form */}
+      <div className="p-10 border-2 border-black w-1/3 rounded-xl mx-auto">
+        <form onSubmit={onSubmit}>
+          {/* Other Attributes */}
+          {formDetails.map(({ displayName, inputName, type, placeholder, error }, index) => (
+            <div className="mb-4" key={index}>
+              <label>{displayName}</label>
+              <br />
+              <input
+                type={type}
+                placeholder={placeholder}
+                className="py-3 pl-4 border-2 border-black rounded-xl w-full"
+                {...register(inputName as "email" | "password")}
+              />
+              <p>{error}</p>
+            </div>
+          ))}
+          {/* Submit */}
+          <div className="flex justify-end">
+            <input
+              type="submit"
+              className="bg-blue text-white px-4 py-3 border-2 border-black rounded-full cursor-pointer"
+              value="Log In"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default Login;
