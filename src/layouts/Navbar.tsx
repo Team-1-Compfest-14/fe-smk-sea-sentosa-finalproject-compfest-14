@@ -8,7 +8,7 @@ const Navbar = () => {
 
       {/* Menu */}
       <div className="flex items-center justify-evenly">
-        <MenuOption text="Log In" route="/register" style="font-bold mr-24" />
+        <MenuOption text="Log In" route="/login" style="font-bold mr-24" />
         <MenuOption
           text="Register"
           route="/register"
