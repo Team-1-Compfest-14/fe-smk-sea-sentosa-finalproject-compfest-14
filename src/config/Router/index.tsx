@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Footer, Navbar } from "../../layouts";
-import { Home, Register, Login } from "../../pages";
+import { Home, Register, Login, InstructorDashboard, Page404 } from "../../pages";
 
 const Router = () => {
   return (
@@ -10,6 +10,8 @@ const Router = () => {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<InstructorDashboard />} />
+        <Route path="*" element={<Page404 />} />
       </Routes>
       <Footer />
     </BrowserRouter>

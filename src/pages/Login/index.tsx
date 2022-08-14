@@ -2,6 +2,7 @@ import { useDocumentTitle } from "../../hooks";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchema } from "./validations/Validations";
+import { Link } from "react-router-dom";
 
 interface FormValues {
   email: string;
@@ -57,7 +58,7 @@ const Login = () => {
               <p>{error}</p>
             </div>
           ))}
-          {/* Submit */}
+          {/* Log In */}
           <div className="flex justify-end">
             <input
               type="submit"
@@ -67,6 +68,12 @@ const Login = () => {
           </div>
         </form>
       </div>
+      <p className="text-center mt-5">
+        Want to make a new account?{" "}
+        <Link to="/register" className="font-bold text-blue underline">
+          Register here.
+        </Link>
+      </p>
     </div>
   );
 };
