@@ -1,5 +1,4 @@
-import Logo from "../components/Logo";
-import PrimaryButton from "../components/PrimaryButton";
+import { Logo, PrimaryButton } from "../components";
 
 const Navbar = () => {
   return (
