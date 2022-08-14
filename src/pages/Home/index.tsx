@@ -1,3 +1,4 @@
+import { useDocumentTitle } from "../../hooks";
 import { HeroArt, StudentArt, TeacherLeftArt, TeacherRightArt } from "./assets";
 import { Divider, FeatureCard } from "./components";
 
@@ -13,6 +14,8 @@ const Home = () => {
     "Add quizzes to each lecture inside a course.",
     "Share their knowledge in a more efficient way."
   ];
+
+  useDocumentTitle("Pelajarin | Learn more, easier.");
 
   return (
     <div>
