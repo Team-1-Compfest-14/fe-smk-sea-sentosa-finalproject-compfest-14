@@ -1,8 +1,6 @@
-import { Logo, PrimaryButton } from "../components";
-import { Link, useNavigate } from "react-router-dom";
+import { Logo, MenuOption } from "../components";
 
 const Navbar = () => {
-  const navigate = useNavigate();
   return (
     <div className="bg-orange-light p-8 border-b border-black flex items-center justify-around">
       {/* Logo */}
@@ -10,10 +8,12 @@ const Navbar = () => {
 
       {/* Menu */}
       <div className="flex items-center justify-evenly">
-        <Link to="/login" className="font-bold mr-24">
-          Log In
-        </Link>
-        <PrimaryButton text="Register" onClick={() => navigate("/register")} />
+        <MenuOption text="Log In" route="/register" style="font-bold mr-24" />
+        <MenuOption
+          text="Register"
+          route="/register"
+          style="bg-blue px-4 py-2 text-white rounded-lg border border-black cursor-pointer"
+        />
       </div>
     </div>
   );

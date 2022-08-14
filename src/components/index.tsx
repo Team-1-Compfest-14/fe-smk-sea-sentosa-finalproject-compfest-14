@@ -1,4 +1,4 @@
 import Logo from "./Logo";
-import PrimaryButton from "./PrimaryButton";
+import MenuOption from "./MenuOption";
 
-export { Logo, PrimaryButton };
+export { Logo, MenuOption };
