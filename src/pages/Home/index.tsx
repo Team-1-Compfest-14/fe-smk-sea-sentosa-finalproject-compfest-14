@@ -69,8 +69,6 @@ const Home = () => {
         {/* Right Side */}
         <TeacherRightArt className="w-1/6" />
       </div>
-
-      <Divider />
     </div>
   );
 };
