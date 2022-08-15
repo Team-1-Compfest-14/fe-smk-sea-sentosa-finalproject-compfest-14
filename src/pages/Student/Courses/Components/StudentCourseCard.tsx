@@ -1,17 +1,23 @@
+import { useState } from "react";
 import { GoPerson } from "react-icons/go";
 import { TbNotes } from "react-icons/tb";
+import CourseDetailModal from "./CourseDetailModal";
 
 interface StudentCourseCardProps {
   courseName: string;
   instructorName: string;
   numOfSections: number;
+  description: string;
 }
 
 const StudentCourseCard = ({
   courseName,
   instructorName,
-  numOfSections
+  numOfSections,
+  description
 }: StudentCourseCardProps) => {
+  const [showCourseDetailModal, setShowCourseDetailModal] = useState(false);
+
   return (
     <div className="h-40 border w-full border-black rounded-2xl flex justify-between items-center my-4 px-10">
       {/* Details */}
@@ -30,13 +36,31 @@ const StudentCourseCard = ({
       </div>
       {/* Button */}
       <div className="flex flex-col items-center justify-center p-4">
-        <button className="my-2 px-4 py-2 border border-black rounded-lg hover:bg-slate-200">
+        <button
+          onClick={() => {
+            document.body.style.overflow = "hidden";
+            setShowCourseDetailModal(true);
+          }}
+          className="my-2 px-4 py-2 border border-black rounded-lg hover:bg-slate-200"
+        >
           Details
         </button>
         <button className="my-2 px-5 py-2 border border-black rounded-lg bg-orange-light hover:bg-orange-dark">
           Enroll
         </button>
       </div>
+
+      {showCourseDetailModal && (
+        <CourseDetailModal
+          handleBack={() => {
+            document.body.style.overflow = "auto";
+            setShowCourseDetailModal(false);
+          }}
+          courseName={courseName}
+          instructorName={instructorName}
+          description={description}
+        />
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { ReactComponent as FolderIdeaBulb } from "../assets/folder_idea_bulb.svg";
+import { FolderIdeaBulb } from "../../../../assets";
 
 const VerifiedCourseCard = () => {
   return (
