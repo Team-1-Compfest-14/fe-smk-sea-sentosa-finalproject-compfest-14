@@ -1,29 +1,76 @@
-import { ReactComponent as CellArt } from "./assets/cell_art.svg";
+import { useDocumentTitle } from "../../../hooks";
+import { CourseCard, HeaderCard } from "../../../components";
+import { useState } from "react";
+import { AddCourseModal } from "./components";
 
 const InstructorDashboard = () => {
+  useDocumentTitle("Mike's Courses | Pelajarin");
+
+  const [showVerified, setShowVerified] = useState(true);
+  const [showAddCourse, setShowAddCourse] = useState(false);
+
   return (
-    <div className="p-10 flex flex-col items-center justify-center">
+    <div className="p-10 mx-64 my-5 flex flex-col items-center justify-center">
       {/* Header Card */}
-      <div className="bg-orange-light border-2 border-black rounded-3xl w-2/3 flex justify-between items-center overflow-clip mb-8">
-        <p className="text-4xl font-bold ml-10">Mike&apos;s Courses</p>
-        <CellArt />
+      <HeaderCard name="Mike" />
+      {/* Course Options */}
+      <div className="flex w-full items-center justify-evenly my-4">
+        <button
+          onClick={() => {
+            setShowVerified(true);
+          }}
+          className={`px-4 py-2 bg-slate-200 rounded-lg ${
+            showVerified && "bg-yellow rounded-lg border border-black text-black"
+          }`}
+        >
+          Verified
+        </button>
+        <button
+          onClick={() => {
+            setShowVerified(false);
+          }}
+          className={`px-4 py-2 bg-slate-200 rounded-lg ${
+            !showVerified && "bg-yellow rounded-lg border border-black text-black"
+          }`}
+        >
+          Pending
+        </button>
       </div>
-      {/* Course Card */}
-      <div className="w-2/3 h-36 border border-black rounded-2xl flex">
-        {/* Image */}
-        <div className="w-1/5 bg-yellow h-full rounded-2xl border border-black"></div>
-        {/* Details */}
-        <div className="w-4/5 mx-8 my-auto flex justify-between items-center">
-          <div>
-            <p className="text-2xl font-bold mb-2">Calculus 1</p>
-            <p>20 students enrolled</p>
-            <p>8 sections</p>
+      {/* Courses */}
+      {showVerified ? (
+        <>
+          {/* Verified Courses */}
+          <CourseCard name="Calculus 1" numOfStudents="20" numOfSections="8" />
+          <CourseCard name="Calculus 2" numOfStudents="20" numOfSections="8" />
+        </>
+      ) : (
+        // Pending Courses
+        <>
+          <CourseCard name="Introduction to Digital System" numOfSections="8" />
+          <CourseCard name="Foundations of Programming" numOfSections="8" />
+          {/* Add Course Button */}
+          <div className="flex justify-end w-full">
+            <button
+              onClick={() => {
+                document.body.style.overflow = "hidden";
+                setShowAddCourse(true);
+              }}
+              className="bg-blue text-white px-3 py-4 rounded-xl border border-black hover:bg-blue-dark"
+            >
+              Add Course
+            </button>
           </div>
-          <div>
-            <p>Edit</p>
-          </div>
-        </div>
-      </div>
+          {/* Add Course Modal */}
+          {showAddCourse && (
+            <AddCourseModal
+              handleBack={() => {
+                document.body.style.overflow = "auto";
+                setShowAddCourse(false);
+              }}
+            />
+          )}
+        </>
+      )}
     </div>
   );
 };
