@@ -1,14 +1,14 @@
 import { useForm } from "react-hook-form";
 import { IoChevronBack } from "react-icons/io5";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { lectureValidationSchema } from "../validations/Validations";
-import { Lecture } from "../../../../typings";
+import { quizValidationSchema } from "../validations/Validations";
+import { Quiz } from "../../../../typings";
 import { Modal } from "../../../../components";
 
-interface AddLectureModalProp {
-  lectures: Lecture[];
+interface AddQuizModalProp {
+  quizzes: Quiz[];
   // eslint-disable-next-line no-unused-vars
-  setLectures: (params: Lecture[]) => void;
+  setQuizzes: (params: Quiz[]) => void;
   handleBack: () => void;
 }
 
@@ -17,34 +17,50 @@ interface FormValues {
   link: string;
 }
 
-const AddLectureModal = ({ handleBack, lectures, setLectures }: AddLectureModalProp) => {
+const AddQuizModal = ({ handleBack, quizzes, setQuizzes }: AddQuizModalProp) => {
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<FormValues>({ resolver: yupResolver(lectureValidationSchema) });
+  } = useForm<FormValues>({ resolver: yupResolver(quizValidationSchema) });
 
   const formDetails = [
     {
       displayName: "Title",
       inputName: "title",
       type: "text",
-      placeholder: "History of Indonesia",
+      placeholder: "Integrals Drilling 2",
       error: errors?.title?.message
-    },
-    {
-      displayName: "Redirect Link (include http:// or https://)",
-      inputName: "link",
-      type: "url",
-      placeholder: "This can be either a PDF or YouTube link",
-      error: errors?.link?.message
     }
   ];
 
   const onSubmit = handleSubmit((data) => {
-    const items = Array.from(lectures);
-    items.push({ ...data, index: lectures.length, id: 1010 });
-    setLectures(items);
+    console.log(data);
+    const items = Array.from(quizzes);
+    items.push({
+      ...data,
+      index: quizzes.length,
+      id: 1010,
+      questions: [
+        {
+          id: 0,
+          description: "This is where you type your question",
+          options: [
+            { id: 0, value: "Option A", correctAnswer: false },
+            { id: 1, value: "Option B", correctAnswer: false }
+          ]
+        },
+        {
+          id: 1,
+          description: "This is where you type your question",
+          options: [
+            { id: 0, value: "Option A", correctAnswer: false },
+            { id: 1, value: "Option B", correctAnswer: false }
+          ]
+        }
+      ]
+    });
+    setQuizzes(items);
     handleBack();
   });
 
@@ -53,11 +69,13 @@ const AddLectureModal = ({ handleBack, lectures, setLectures }: AddLectureModalP
       {/* Header */}
       <p className="flex items-center mb-4 font-bold text-xl gap-4">
         <IoChevronBack
-          onClick={() => handleBack()}
+          onClick={() => {
+            handleBack();
+          }}
           size={28}
           className="bg-orange-light rounded-lg border border-black cursor-pointer"
         />
-        Adding a new course
+        Adding a new quiz
       </p>
       {/* Form */}
       <form onSubmit={onSubmit}>
@@ -90,4 +108,4 @@ const AddLectureModal = ({ handleBack, lectures, setLectures }: AddLectureModalP
   );
 };
 
-export default AddLectureModal;
+export default AddQuizModal;
