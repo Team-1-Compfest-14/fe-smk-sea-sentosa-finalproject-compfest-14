@@ -7,7 +7,8 @@ import {
   InstructorDashboard,
   Page404,
   InstructorCourse,
-  AdminVerifyCourses
+  AdminVerifyCourses,
+  AdminVerifyInstructors
 } from "../../pages";
 
 const Router = () => {
@@ -19,6 +20,7 @@ const Router = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/admin/courses" element={<AdminVerifyCourses />} />
+        <Route path="/admin/instructors" element={<AdminVerifyInstructors />} />
         <Route path="/dashboard" element={<InstructorDashboard />} />
         <Route path="/courses/:id" element={<InstructorCourse />} />
         <Route path="*" element={<Page404 />} />
