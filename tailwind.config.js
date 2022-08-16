@@ -10,10 +10,8 @@ module.exports = {
         blue: "#3278ff",
         "blue-dark": "#0044cc",
         green: "#23eb8b",
-        red: "eb3223",
         yellow: "#ffc306",
-        purple: "#db74ff",
-        brown: "#a87e67"
+        purple: "#db74ff"
       },
       fontFamily: {
         sans: ["'Space Grotesk'", "sans-serif"],
