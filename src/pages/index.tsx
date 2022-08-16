@@ -4,5 +4,14 @@ import Register from "./Register";
 import InstructorDashboard from "./Instructor/Dashboard";
 import InstructorCourse from "./Instructor/Course";
 import Page404 from "./Page404";
+import AdminVerifyCourses from "./AdminVerifyCourses";
 
-export { Home, Login, Register, Page404, InstructorDashboard, InstructorCourse };
+export {
+  Home,
+  Login,
+  Register,
+  Page404,
+  InstructorDashboard,
+  InstructorCourse,
+  AdminVerifyCourses
+};
