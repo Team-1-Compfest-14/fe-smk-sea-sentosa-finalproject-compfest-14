@@ -5,6 +5,7 @@ import InstructorDashboard from "./Instructor/Dashboard";
 import InstructorCourse from "./Instructor/Course";
 import Page404 from "./Page404";
 import AdminVerifyCourses from "./AdminVerifyCourses";
+import AdminVerifyInstructors from "./AdminVerifyInstructors";
 
 export {
   Home,
@@ -13,5 +14,6 @@ export {
   Page404,
   InstructorDashboard,
   InstructorCourse,
-  AdminVerifyCourses
+  AdminVerifyCourses,
+  AdminVerifyInstructors
 };
