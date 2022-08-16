@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GoPerson } from "react-icons/go";
+import { GiTeacher } from "react-icons/gi";
 import { TbNotes } from "react-icons/tb";
 import CourseDetailModal from "./CourseDetailModal";
 
@@ -25,7 +25,7 @@ const StudentCourseCard = ({
         <div>
           <p className="text-2xl font-bold mb-4">{courseName}</p>
           <p className="flex items-center mb-2">
-            <GoPerson className="mr-2" size={20} />
+            <GiTeacher className="mr-2" size={20} />
             {instructorName}
           </p>
           <p className="flex items-center mb-2">

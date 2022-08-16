@@ -6,5 +6,15 @@ import InstructorCourse from "./Instructor/Course";
 import Page404 from "./Page404";
 
 import StudentCourses from "./Student/Courses";
+import StudentCourseDetail from "./Student/Courses/StudentCourseDetail";
 
-export { Home, Login, Register, Page404, InstructorDashboard, InstructorCourse, StudentCourses };
+export {
+  Home,
+  Login,
+  Register,
+  Page404,
+  InstructorDashboard,
+  InstructorCourse,
+  StudentCourses,
+  StudentCourseDetail
+};
