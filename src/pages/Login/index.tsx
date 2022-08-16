@@ -33,7 +33,7 @@ const Login = () => {
     if (status === "success") {
       const { role }: any = decoded;
       if (role === 2) {
-        navigate("/admin/courses");
+        navigate("/admin/instructors");
       }
     } else {
       console.log("error");
