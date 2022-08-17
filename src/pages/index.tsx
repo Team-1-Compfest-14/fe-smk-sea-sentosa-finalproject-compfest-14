@@ -7,6 +7,7 @@ import Page404 from "./Page404";
 
 import StudentCourses from "./Student/Courses";
 import StudentCourseDetail from "./Student/Courses/StudentCourseDetail";
+import StudentDashboard from "./Student/Dashboard";
 
 export {
   Home,
@@ -16,5 +17,6 @@ export {
   InstructorDashboard,
   InstructorCourse,
   StudentCourses,
-  StudentCourseDetail
+  StudentCourseDetail,
+  StudentDashboard
 };
