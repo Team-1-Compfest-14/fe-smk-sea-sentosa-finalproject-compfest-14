@@ -3,18 +3,10 @@ import jwt_decode from "jwt-decode";
 import React, { useEffect, useState } from "react";
 
 function AdminVerifyInstructors() {
-  const [instructors, setInstructors] = useState([]);
+  const [instructors, setInstructors]: any = useState([]);
   const [token, setToken] = useState("");
   const [expire, setExpire]: any = useState("");
-
-  // const refreshToken = async () => {
-  //   const response = await axios.get("http://localhost:8080/auth/refresh");
-  //   const { accessToken } = response.data.data;
-  //   setToken(accessToken);
-  //   const decoded = jwt_decode(accessToken);
-  //   const { exp }: any = decoded;
-  //   setExpire(exp);
-  // };
+  const [loading, setLoading]: any = useState(true);
 
   const axiosJWT = axios.create();
   axiosJWT.interceptors.request.use(
@@ -46,25 +38,29 @@ function AdminVerifyInstructors() {
     const { users } = response.data.data;
     setInstructors(users);
     console.log(instructors);
+    setLoading(false);
   };
 
-  const useEffectAsync = (effect: any, inputs: any) => {
-    useEffect(() => {
-      effect();
-    }, inputs);
-  };
-
-  useEffectAsync(async () => {
-    await getUnverifiedInstructor();
+  useEffect(() => {
+    getUnverifiedInstructor();
   }, []);
 
   return (
     <>
-      <button onClick={getUnverifiedInstructor}>Click us</button>
-      {instructors.map((instructor: any, index: any) => {
-        <h1>{instructor.email}</h1>;
-        <h1>{index}</h1>;
-      })}
+      {/* <button onClick={getUnverifiedInstructor}>Click us</button> */}
+      {loading ? (
+        <h1>kontol</h1>
+      ) : (
+        instructors.map((instructor: any, index: any) => {
+          return (
+            <>
+              <h1>{instructor.email}</h1>
+              <h1>{index}</h1>
+              <h1>KONTOL BADAG</h1>
+            </>
+          );
+        })
+      )}
     </>
   );
 }
