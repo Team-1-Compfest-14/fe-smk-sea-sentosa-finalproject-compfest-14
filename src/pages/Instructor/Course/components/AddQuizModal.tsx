@@ -44,6 +44,7 @@ const AddQuizModal = ({ handleBack, quizzes, setQuizzes }: AddQuizModalProp) => 
       questions: [
         {
           id: 0,
+          index: 0,
           description: "This is where you type your question",
           options: [
             { id: 0, value: "Option A", correctAnswer: false },
@@ -52,6 +53,7 @@ const AddQuizModal = ({ handleBack, quizzes, setQuizzes }: AddQuizModalProp) => 
         },
         {
           id: 1,
+          index: 1,
           description: "This is where you type your question",
           options: [
             { id: 0, value: "Option A", correctAnswer: false },

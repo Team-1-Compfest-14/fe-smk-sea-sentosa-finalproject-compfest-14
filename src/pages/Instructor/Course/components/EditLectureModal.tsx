@@ -5,7 +5,7 @@ import { lectureValidationSchema } from "../validations/Validations";
 import { Lecture } from "../../../../typings";
 import { Modal } from "../../../../components";
 
-interface AddLectureModalProp {
+interface EditLectureModalProp {
   lectures: Lecture[];
   selectedItem: Lecture;
   // eslint-disable-next-line no-unused-vars
@@ -23,7 +23,7 @@ const EditLectureModal = ({
   selectedItem,
   lectures,
   setLectures
-}: AddLectureModalProp) => {
+}: EditLectureModalProp) => {
   const {
     register,
     handleSubmit,

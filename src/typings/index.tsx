@@ -1,3 +1,13 @@
+export type Course = {
+  id: number;
+  index: number;
+  title: string;
+  description: string;
+  numOfStudents: number;
+  numOfSections: number;
+  verified: boolean;
+};
+
 export type Lecture = {
   id: number;
   title: string;
@@ -13,6 +23,7 @@ export type Option = {
 
 export type Question = {
   id: number;
+  index: number;
   description: string;
   options: Option[];
 };

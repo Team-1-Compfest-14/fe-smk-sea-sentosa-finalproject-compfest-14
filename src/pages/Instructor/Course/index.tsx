@@ -109,6 +109,7 @@ const InstructorCourse = () => {
       questions: [
         {
           id: 0,
+          index: 0,
           description: "Test question",
           options: [
             { id: 0, value: "Option A", correctAnswer: true },
@@ -120,6 +121,7 @@ const InstructorCourse = () => {
         },
         {
           id: 1,
+          index: 1,
           description: "Test question2",
           options: [
             { id: 0, value: "Option A", correctAnswer: true },
@@ -131,6 +133,7 @@ const InstructorCourse = () => {
         },
         {
           id: 2,
+          index: 2,
           description: "Test question3",
           options: [
             { id: 0, value: "Option A", correctAnswer: true },
@@ -149,6 +152,7 @@ const InstructorCourse = () => {
       questions: [
         {
           id: 0,
+          index: 0,
           description: "Test question",
           options: [
             { id: 0, value: "Option A", correctAnswer: true },
@@ -160,6 +164,7 @@ const InstructorCourse = () => {
         },
         {
           id: 1,
+          index: 1,
           description: "Test question2",
           options: [
             { id: 0, value: "Option A", correctAnswer: true },
@@ -171,6 +176,7 @@ const InstructorCourse = () => {
         },
         {
           id: 2,
+          index: 2,
           description: "Test question3",
           options: [
             { id: 0, value: "Option A", correctAnswer: true },
