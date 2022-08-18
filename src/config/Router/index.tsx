@@ -10,7 +10,8 @@ import {
   StudentDashboard,
   Page404,
   InstructorCourse,
-  InstructorQuiz
+  InstructorQuiz,
+  StudentQuiz
 } from "../../pages";
 
 const Router = () => {
@@ -26,6 +27,7 @@ const Router = () => {
         <Route path="/student/dashboard" element={<StudentDashboard />} />
         <Route path="/student/courses" element={<StudentCourses />} />
         <Route path="/student/courses/1" element={<StudentCourseDetail />} />
+        <Route path="/student/courses/1/quizzes/1" element={<StudentQuiz />} />
         <Route path="/courses/:id/quizzes/:id" element={<InstructorQuiz />} />
         <Route path="*" element={<Page404 />} />
       </Routes>

@@ -7,6 +7,7 @@ import InstructorQuiz from "./Instructor/Quiz";
 import StudentCourses from "./Student/Courses";
 import StudentCourseDetail from "./Student/Courses/StudentCourseDetail";
 import StudentDashboard from "./Student/Dashboard";
+import StudentQuiz from "./Student/Courses/Quiz";
 import Page404 from "./Page404";
 
 export {
@@ -19,5 +20,6 @@ export {
   InstructorQuiz,
   StudentCourses,
   StudentCourseDetail,
-  StudentDashboard
+  StudentDashboard,
+  StudentQuiz
 };

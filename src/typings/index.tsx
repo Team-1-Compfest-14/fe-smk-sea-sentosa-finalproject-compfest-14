@@ -34,3 +34,22 @@ export type Quiz = {
   questions: Question[];
   index: number;
 };
+
+export type QuestionStudent = {
+  id: number;
+  index: number;
+  description: string;
+  options: OptionStudent[];
+  isCorrect?: boolean;
+};
+
+export type OptionStudent = {
+  id: number;
+  value: string;
+  correctAnswer?: boolean;
+};
+
+export interface answersInterface {
+  questionId: number;
+  questionOptionId: number;
+}
