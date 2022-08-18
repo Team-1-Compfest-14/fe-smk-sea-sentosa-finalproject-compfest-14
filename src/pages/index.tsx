@@ -8,4 +8,14 @@ import Page404 from "./Page404";
 import AdminVerifyCourses from "./AdminVerifyCourses";
 import AdminVerifyInstructors from "./AdminVerifyInstructors";
 
-export { Home, Login, Register, Page404, InstructorDashboard, InstructorCourse };
+export {
+  Home,
+  Login,
+  Register,
+  Page404,
+  InstructorDashboard,
+  InstructorCourse,
+  InstructorQuiz,
+  AdminVerifyCourses,
+  AdminVerifyInstructors
+};
