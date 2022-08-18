@@ -5,11 +5,12 @@ import {
   Register,
   Login,
   InstructorDashboard,
-  InstructorCourse,
   StudentCourses,
   StudentCourseDetail,
   StudentDashboard,
-  Page404
+  Page404,
+  InstructorCourse,
+  InstructorQuiz
 } from "../../pages";
 
 const Router = () => {
@@ -22,10 +23,10 @@ const Router = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<InstructorDashboard />} />
         <Route path="/courses/:id" element={<InstructorCourse />} />
-
         <Route path="/student/dashboard" element={<StudentDashboard />} />
         <Route path="/student/courses" element={<StudentCourses />} />
         <Route path="/student/courses/1" element={<StudentCourseDetail />} />
+        <Route path="/courses/:id/quizzes/:id" element={<InstructorQuiz />} />
         <Route path="*" element={<Page404 />} />
       </Routes>
       <Footer />
