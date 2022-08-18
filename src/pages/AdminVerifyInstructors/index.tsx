@@ -47,6 +47,9 @@ function AdminVerifyInstructors() {
 
   return (
     <>
+      <h1 className="bg-green p-10 text mt-9 w-5/6 m-auto text-black font-bold text-3xl rounded-md border-black border-2">
+        Pending Instructors
+      </h1>
       {/* <button onClick={getUnverifiedInstructor}>Click us</button> */}
       {loading ? (
         <h1>kontol</h1>
