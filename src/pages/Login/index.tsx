@@ -2,7 +2,9 @@ import { useDocumentTitle } from "../../hooks";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchema } from "./validations/Validations";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 interface FormValues {
   email: string;
@@ -17,7 +19,26 @@ const Login = () => {
     formState: { errors }
   } = useForm<FormValues>({ resolver: yupResolver(validationSchema) });
 
-  const onSubmit = handleSubmit((data) => console.log(data));
+  const navigate = useNavigate();
+
+  const onSubmit = handleSubmit(async (data) => {
+    const { email, password } = data;
+    const response = await axios.post("http://localhost:8080/auth/login", {
+      email: email,
+      password: password
+    });
+    const { status } = response.data;
+    const { accessToken } = response.data.data;
+    const decoded = jwt_decode(accessToken);
+    if (status === "success") {
+      const { role }: any = decoded;
+      if (role === 2) {
+        navigate("/admin/instructors");
+      }
+    } else {
+      console.log("error");
+    }
+  });
 
   const formDetails = [
     {
