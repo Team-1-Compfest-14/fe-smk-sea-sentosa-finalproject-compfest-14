@@ -73,3 +73,28 @@ export interface studentDashboardHeader {
   totalActive: number;
   totalComplete: number;
 }
+
+export interface StudentLectureDetailInterface {
+  id: number;
+  name: string;
+  order: number;
+  lectureLink: string;
+  isComplete: boolean;
+}
+
+export interface StudentQuizDetailInterface {
+  id: number;
+  name: string;
+  order: number;
+  isComplete: boolean;
+}
+
+export interface StudentCourseDetailHeaderInterface {
+  name: string;
+  instructorName: string;
+  description: string;
+  totalLectures: number;
+  totalCompleteLectures: number;
+  totalQuizzes: number;
+  totalCompleteQuizzes: number;
+}
