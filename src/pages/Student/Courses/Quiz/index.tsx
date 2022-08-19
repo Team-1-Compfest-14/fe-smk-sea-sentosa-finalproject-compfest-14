@@ -55,10 +55,33 @@ const StudentQuiz = () => {
     studentAnswers.push(answer);
   };
 
-  const handleSubmitAnswer = () => {
+  const handleSubmitAnswer = async () => {
     const answers: questionAnswersInterface = {
       answers: studentAnswers
     };
+
+    const accessToken = localStorage.getItem("accessToken");
+
+    await axiosJWT
+      .post(
+        `http://localhost:5000/courses/${courseId}/quizzes/${quizId}/answer`,
+        {
+          answers: studentAnswers
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        }
+      )
+      .then(() => {
+        alert("You have finished the quiz");
+        navigate(`/student/courses/${courseId}/quizzes/${quizId}/feedback`);
+      })
+      .catch(() => {
+        alert("There's an error");
+        navigate(`/student/dashboard`);
+      });
   };
 
   const handleConfirmExit = (type: string) => {
@@ -99,7 +122,6 @@ const StudentQuiz = () => {
           <button
             className="bg-blue text-white px-4 py-2 rounded-xl border border-black hover:bg-blue-dark"
             onClick={() => {
-              alert("You have finished the quiz");
               handleSubmitAnswer();
             }}
           >
