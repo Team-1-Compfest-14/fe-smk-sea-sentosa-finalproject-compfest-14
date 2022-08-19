@@ -4,6 +4,7 @@ import CourseDetailModal from "./CourseDetailModal";
 import CourseDetailCard from "./CourseDetailCard";
 import SimpleCourseCard from "./SimpleCourseCard";
 import QuestionCard from "./QuestionCard";
+import ConfirmExitModal from "./ConfirmExitModal";
 
 export {
   StudentCourseCard,
@@ -11,5 +12,6 @@ export {
   CourseDetailModal,
   CourseDetailCard,
   SimpleCourseCard,
-  QuestionCard
+  QuestionCard,
+  ConfirmExitModal
 };

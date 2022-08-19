@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
-import { QuestionCard } from "../Components";
+import { QuestionCard, ConfirmExitModal } from "../Components";
 import { answersInterface } from "../../../../typings";
 
 interface questionAnswersInterface {
@@ -9,6 +10,10 @@ interface questionAnswersInterface {
 }
 
 const StudentQuiz = () => {
+  const navigate = useNavigate();
+
+  const [showConfirmExitModal, setShowConfirmExitModal] = useState(false);
+
   const questions = [
     {
       id: 0,
@@ -57,11 +62,16 @@ const StudentQuiz = () => {
     const answers: questionAnswersInterface = {
       answers: studentAnswers
     };
-
-    console.log(answers);
   };
 
-  const navigate = useNavigate();
+  const handleConfirmExit = (type: string) => {
+    if (type === "confirm") {
+      setShowConfirmExitModal(false);
+      navigate(-1);
+    } else {
+      setShowConfirmExitModal(false);
+    }
+  };
 
   return (
     <div className="p-10 flex flex-col items-center justify-center">
@@ -70,9 +80,7 @@ const StudentQuiz = () => {
         <div className="flex items-center justify-between mb-20">
           <p className="font-bold text-4xl flex gap-3">
             <IoChevronBack
-              onClick={() => {
-                navigate(-1);
-              }}
+              onClick={() => setShowConfirmExitModal(true)}
               size={40}
               className="bg-orange-light rounded-lg border border-black cursor-pointer mr-5"
             />
@@ -97,6 +105,7 @@ const StudentQuiz = () => {
           </button>
         </div>
       </div>
+      {showConfirmExitModal && <ConfirmExitModal handleConfirmExit={handleConfirmExit} />}
     </div>
   );
 };
