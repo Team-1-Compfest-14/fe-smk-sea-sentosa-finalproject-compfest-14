@@ -16,7 +16,7 @@ const StudentDashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios
+      await axios
         .get("http://localhost:5000/courses/dashboard/progress", {
           headers: {
             Authorization: `Bearer ${accessToken}`
@@ -40,9 +40,9 @@ const StudentDashboard = () => {
             totalComplete
           });
         })
-        .catch((err) => {
+        .catch(async (err) => {
           if (err.response.data.message === "JWT expired") {
-            axios
+            await axios
               .post("http://localhost:5000/auth/refresh", {
                 headers: {
                   Authorization: `Bearer ${accessToken}`
@@ -63,59 +63,57 @@ const StudentDashboard = () => {
   }, []);
 
   return (
-    <div className="p-10 mx-64 my-5 flex flex-col items-center justify-center">
-      <div className="w-2/3">
-        <StudentDashboardHeaderCard {...headerData!} />
-        <div className="flex w-full items-center justify-evenly my-8">
-          <button
-            onClick={() => {
-              setShowCompleteCourses(false);
-            }}
-            className={`px-4 py-2 bg-slate-200 rounded-lg ${
-              !showCompleteCourses && "bg-yellow rounded-lg border border-black text-black"
-            }`}
-          >
-            Active
-          </button>
-          <button
-            onClick={() => {
-              setShowCompleteCourses(true);
-            }}
-            className={`px-4 py-2 bg-slate-200 rounded-lg ${
-              showCompleteCourses && "bg-orange-dark rounded-lg border border-black text-black"
-            }`}
-          >
-            Completed
-          </button>
-        </div>
-        {showCompleteCourses && enrolledCourses
-          ? enrolledCourses
-              .filter((item) => item.isComplete === true)
-              .map((item, index) => (
-                <CourseCardWithProgressBar
-                  key={index}
-                  name={item.name}
-                  teacher={item.teacher}
-                  totalModuleCompletion={item.totalModuleCompletion}
-                  totalModule={item.totalModule}
-                  isComplete={item.isComplete}
-                  courseId={item.courseId}
-                />
-              ))
-          : enrolledCourses
-              .filter((item) => item.isComplete === false)
-              .map((item, index) => (
-                <CourseCardWithProgressBar
-                  key={index}
-                  name={item.name}
-                  teacher={item.teacher}
-                  totalModuleCompletion={item.totalModuleCompletion}
-                  totalModule={item.totalModule}
-                  isComplete={item.isComplete}
-                  courseId={item.courseId}
-                />
-              ))}
+    <div className="container mx-auto p-10 max-w-screen-lg">
+      <StudentDashboardHeaderCard {...headerData!} />
+      <div className="flex w-full items-center justify-evenly my-8">
+        <button
+          onClick={() => {
+            setShowCompleteCourses(false);
+          }}
+          className={`px-4 py-2 bg-slate-200 rounded-lg ${
+            !showCompleteCourses && "bg-yellow rounded-lg border border-black text-black"
+          }`}
+        >
+          Active
+        </button>
+        <button
+          onClick={() => {
+            setShowCompleteCourses(true);
+          }}
+          className={`px-4 py-2 bg-slate-200 rounded-lg ${
+            showCompleteCourses && "bg-orange-dark rounded-lg border border-black text-black"
+          }`}
+        >
+          Completed
+        </button>
       </div>
+      {showCompleteCourses && enrolledCourses
+        ? enrolledCourses
+            .filter((item) => item.isComplete === true)
+            .map((item, index) => (
+              <CourseCardWithProgressBar
+                key={index}
+                name={item.name}
+                teacher={item.teacher}
+                totalModuleCompletion={item.totalModuleCompletion}
+                totalModule={item.totalModule}
+                isComplete={item.isComplete}
+                courseId={item.courseId}
+              />
+            ))
+        : enrolledCourses
+            .filter((item) => item.isComplete === false)
+            .map((item, index) => (
+              <CourseCardWithProgressBar
+                key={index}
+                name={item.name}
+                teacher={item.teacher}
+                totalModuleCompletion={item.totalModuleCompletion}
+                totalModule={item.totalModule}
+                isComplete={item.isComplete}
+                courseId={item.courseId}
+              />
+            ))}
     </div>
   );
 };
