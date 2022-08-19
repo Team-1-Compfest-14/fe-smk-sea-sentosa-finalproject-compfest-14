@@ -2,6 +2,9 @@ import { useForm } from "react-hook-form";
 import { useDocumentTitle } from "../../hooks";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchema } from "./validations/Validations";
+import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface FormValues {
   role: 0 | 1; // student: 0, instructor: 1
@@ -20,7 +23,26 @@ const Register = () => {
     formState: { errors }
   } = useForm<FormValues>({ resolver: yupResolver(validationSchema) });
 
-  const onSubmit = handleSubmit((data) => console.log(data));
+  const [selectedRole, setSelectedRole] = useState<number>(-1);
+
+  const navigate = useNavigate();
+
+  const onSubmit = handleSubmit(async (data) => {
+    const { name, email, password } = data;
+    axios
+      .post("http://localhost:5000/auth/register", {
+        role: selectedRole,
+        name,
+        email,
+        password
+      })
+      .then((res) => {
+        console.log(res);
+        alert("Successfully registered your account! Please log in to continue using Pelajarin.");
+        navigate("/login");
+      })
+      .catch((err) => console.log(err));
+  });
 
   const formDetails = [
     {
@@ -53,7 +75,6 @@ const Register = () => {
     }
   ];
 
-  // Known issues: some colors don't render out (ex. : red)
   return (
     <div className="px-8 py-16">
       <p className="text-center text-xl font-bold mb-10">
@@ -65,9 +86,14 @@ const Register = () => {
           {/* Role */}
           <div className="mb-4">
             <label>Role</label>
+            <input
+              type="number"
+              className="hidden"
+              {...register("role", { valueAsNumber: true })}
+            />
             <select
+              onChange={(e) => setSelectedRole(parseInt(e.target.value))}
               className="py-3 pl-4 border-2 border-black rounded-xl w-full"
-              {...register("role")}
             >
               <option value={0}>Student</option>
               <option value={1}>Instructor</option>

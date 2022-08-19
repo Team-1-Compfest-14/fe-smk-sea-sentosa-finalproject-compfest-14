@@ -65,11 +65,11 @@ const StudentQuestionCard = ({
       {question.options.map((option, index) => (
         <div key={index} className="flex items-center gap-2">
           <input
-            type="radio"
+            type="checkbox"
+            disabled
             value={option.value}
-            className="border-black checked:bg-green checked:border-green"
+            className="border-black checked:bg-green rounded-full"
             defaultChecked={option.correctAnswer ? true : false}
-            name={`question${question.id}Answer`}
           />
           <label>{option.value}</label>
         </div>
