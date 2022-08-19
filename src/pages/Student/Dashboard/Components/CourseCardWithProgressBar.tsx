@@ -15,14 +15,14 @@ const CourseCardWithProgressBar = ({
   }
 
   const progressStyle = {
-    width: countProgressBar() + "%"
+    width: `${countProgressBar()}%`
   };
 
   return (
     <div className="h-40 border w-full border-black rounded-2xl flex justify-between items-center my-4 px-10">
       {/* Details */}
-      <div className="my-auto flex justify-between items-center">
-        <div>
+      <div className="w-full flex justify-between items-center">
+        <div className="w-full">
           <p className="text-2xl font-bold mb-4">{name}</p>
           <p className="flex items-center mb-2">
             <GiTeacher className="mr-2" size={20} />
@@ -31,14 +31,14 @@ const CourseCardWithProgressBar = ({
           <div>
             {!isComplete && (
               <p className="mt-5 text-sm font-semibold">
-                {totalModule} out of {totalModuleCompletion} sections completed.
+                {totalModuleCompletion} out of {totalModule} sections completed.
               </p>
             )}
-            <div className="w-full bg-orange-light rounded-full border border-black">
-              <div
-                className="text-xs font-medium text-center p-0.5 leading-none rounded-full"
-                style={progressStyle}
-              >
+            <div
+              className="w-full bg-orange-light rounded-full border border-black"
+              style={progressStyle}
+            >
+              <div className="text-xs font-medium text-center p-0.5 leading-none rounded-full">
                 {countProgressBar()}%
               </div>
             </div>

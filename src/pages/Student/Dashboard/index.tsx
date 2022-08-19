@@ -63,7 +63,7 @@ const StudentDashboard = () => {
   }, []);
 
   return (
-    <div className="p-10 flex flex-col items-center justify-center">
+    <div className="p-10 mx-64 my-5 flex flex-col items-center justify-center">
       <div className="w-2/3">
         <StudentDashboardHeaderCard {...headerData!} />
         <div className="flex w-full items-center justify-evenly my-8">
