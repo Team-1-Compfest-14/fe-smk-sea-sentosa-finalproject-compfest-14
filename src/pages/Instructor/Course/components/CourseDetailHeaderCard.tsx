@@ -5,57 +5,14 @@ import { useState } from "react";
 import EditCourseModal from "./EditCourseModal";
 
 interface CourseDetailHeaderCardProps {
-  title: string;
+  name: string;
   description: string;
   lectures: Lecture[];
   quizzes: Quiz[];
 }
 
-const courses = [
-  {
-    id: 0,
-    index: 0,
-    title: "Calculus 1",
-    description:
-      "In this course, students will be introduced to limits and how they are the basis of the topics of derivatives and their applications, and also integration and application of integrals. This course is a prerequisite for Calculus 2 and an understanding of this course will be crucial to understand Calculus 2.",
-    numOfStudents: 10,
-    numOfSections: 10,
-    verified: true
-  },
-  {
-    id: 1,
-    index: 1,
-    title: "Calculus 2",
-    description:
-      "In this course, students will be introduced to limits and how they are the basis of the topics of derivatives and their applications, and also integration and application of integrals. This course is a prerequisite for Calculus 2 and an understanding of this course will be crucial to understand Calculus 2.",
-    numOfStudents: 10,
-    numOfSections: 10,
-    verified: false
-  },
-  {
-    id: 2,
-    index: 3,
-    title: "Calculus 3",
-    description:
-      "In this course, students will be introduced to limits and how they are the basis of the topics of derivatives and their applications, and also integration and application of integrals. This course is a prerequisite for Calculus 2 and an understanding of this course will be crucial to understand Calculus 2.",
-    numOfStudents: 10,
-    numOfSections: 10,
-    verified: false
-  },
-  {
-    id: 3,
-    index: 3,
-    title: "Calculus 14",
-    description:
-      "In this course, students will be introduced to limits and how they are the basis of the topics of derivatives and their applications, and also integration and application of integrals. This course is a prerequisite for Calculus 2 and an understanding of this course will be crucial to understand Calculus 2.",
-    numOfStudents: 10,
-    numOfSections: 10,
-    verified: true
-  }
-];
-
 const CourseDetailHeaderCard = ({
-  title,
+  name,
   description,
   lectures,
   quizzes
@@ -76,7 +33,7 @@ const CourseDetailHeaderCard = ({
               size={32}
               className="bg-slate-200 rounded-lg border border-black mr-4 hover:bg-slate-300 cursor-pointer"
             />
-            {title}
+            {name}
           </p>
           <button
             onClick={() => {
@@ -112,7 +69,14 @@ const CourseDetailHeaderCard = ({
             document.body.style.overflow = "auto";
             setShowEditCourseModal(false);
           }}
-          selectedCourse={courses[0]}
+          selectedCourse={{
+            id: 1,
+            instructorId: 1,
+            name: "",
+            description: "",
+            isVerified: false,
+            total: 0
+          }}
         />
       )}
     </div>

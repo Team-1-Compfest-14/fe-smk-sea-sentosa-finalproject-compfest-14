@@ -1,14 +1,14 @@
 import * as Yup from "yup";
 
 export const courseValidationSchema = Yup.object().shape({
-  title: Yup.string()
+  name: Yup.string()
     .required("This is required")
-    .min(4, "Title must be at least 4 characters")
-    .max(64, "Title must not exceed 64 characters"),
+    .min(4, "Name must be at least 4 characters")
+    .max(64, "Name must not exceed 64 characters"),
   description: Yup.string()
     .required("This is required")
-    .min(4, "Title must be at least 4 characters")
-    .max(64, "Title must not exceed 64 characters")
+    .min(4, "Description must be at least 4 characters")
+    .max(128, "Description must not exceed 128 characters")
 });
 
 export const lectureValidationSchema = Yup.object().shape({
@@ -29,8 +29,8 @@ export const quizValidationSchema = Yup.object().shape({
 export const questionValidationSchema = Yup.object().shape({
   description: Yup.string()
     .required("This is required")
-    .min(4, "Title must be at least 4 characters")
-    .max(64, "Title must not exceed 64 characters"),
+    .min(4, "Description must be at least 4 characters")
+    .max(64, "Description must not exceed 64 characters"),
   options: Yup.array()
     .required("This is required")
     .min(2, "There must be at least 2 options")
@@ -38,10 +38,10 @@ export const questionValidationSchema = Yup.object().shape({
     .of(
       Yup.object().shape({
         value: Yup.string()
-          .required("This is required")
-          .min(4, "Title must be at least 4 characters")
-          .max(64, "Title must not exceed 64 characters"),
-        isCorrect: Yup.boolean().required("This is required")
+          .required("Value must not be empty")
+          .min(4, "Value must be at least 4 characters")
+          .max(64, "Value must not exceed 64 characters"),
+        correctAnswer: Yup.boolean().required("Correct answer is required")
       })
     )
 });
