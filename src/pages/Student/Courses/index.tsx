@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { VerifiedCourseCard, StudentCourseCard } from "./Components";
 import { useDocumentTitle } from "../../../hooks";
 import axiosJWT from "../axiosJWT";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface courses {
   courseId: number;
@@ -14,6 +14,7 @@ interface courses {
 
 const StudentCourses = () => {
   useDocumentTitle("All Verified Courses | Pelajarin");
+  const navigate = useNavigate();
 
   const [courses, setCourses] = useState<courses[] | []>([]);
   const accessToken = localStorage.getItem("accessToken");
@@ -50,7 +51,20 @@ const StudentCourses = () => {
   }, []);
 
   const handleEnroll = async (courseId: number) => {
-    console.log(courseId);
+    await axiosJWT
+      .post(
+        `http://localhost:5000/courses/${courseId}/enrollment`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        }
+      )
+      .then(async () => {
+        alert("Success enrolling new course");
+        navigate(`/student/courses/${courseId}`);
+      });
   };
 
   return (

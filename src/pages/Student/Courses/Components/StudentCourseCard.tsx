@@ -59,7 +59,10 @@ const StudentCourseCard = ({
         >
           Details
         </button>
-        <button className="my-2 px-5 py-2 border border-black rounded-lg bg-orange-light hover:bg-orange-dark">
+        <button
+          className="my-2 px-5 py-2 border border-black rounded-lg bg-orange-light hover:bg-orange-dark"
+          onClick={() => handleEnroll(courseId)}
+        >
           Enroll
         </button>
       </div>
