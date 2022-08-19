@@ -1,56 +1,53 @@
 /* eslint-disable no-unused-vars */
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { IoChevronBack } from "react-icons/io5";
 import { QuestionCard, ConfirmExitModal } from "../Components";
-import { answersInterface } from "../../../../typings";
+import { answersInterface, QuestionStudent } from "../../../../typings";
+import { useDocumentTitle } from "../../../../hooks";
+import axiosJWT from "../../axiosJWT";
 
 interface questionAnswersInterface {
   answers: answersInterface[];
 }
 
 const StudentQuiz = () => {
+  useDocumentTitle("Quiz | Pelajarin");
   const navigate = useNavigate();
+  const { courseId, quizId } = useParams();
 
   const [showConfirmExitModal, setShowConfirmExitModal] = useState(false);
+  const [questionsData, setQuestionsData] = useState<QuestionStudent[] | []>([]);
 
-  const questions = [
-    {
-      id: 0,
-      index: 0,
-      description: "Test question",
-      options: [
-        { id: 0, value: "Option A" },
-        { id: 1, value: "Option B" },
-        { id: 2, value: "Option C" },
-        { id: 3, value: "Option D" },
-        { id: 4, value: "Option E" }
-      ]
-    },
-    {
-      id: 1,
-      index: 1,
-      description: "Test question2",
-      options: [
-        { id: 0, value: "Option A" },
-        { id: 1, value: "Option B" },
-        { id: 2, value: "Option C" },
-        { id: 3, value: "Option D" },
-        { id: 4, value: "Option E" }
-      ]
-    },
-    {
-      id: 2,
-      index: 2,
-      description: "Test question3",
-      options: [
-        { id: 0, value: "Option A" },
-        { id: 1, value: "Option B" },
-        { id: 2, value: "Option C" },
-        { id: 3, value: "Option D" }
-      ]
-    }
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      const accessToken = localStorage.getItem("accessToken");
+      await axiosJWT
+        .get(`http://localhost:5000/courses/${courseId}/quizzes/${quizId}/`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
+        .then((res) => {
+          const { questions } = res.data.data;
+          setQuestionsData(questions);
+        })
+        .catch((err) => {
+          if (
+            err.response.status === 400 &&
+            err.response.data.message === "Quiz already completed."
+          ) {
+            navigate(`/student/courses/${courseId}/quizzes/${quizId}/feedback`);
+          } else {
+            alert("There's an error");
+            navigate(`/student/dashboard`);
+          }
+        });
+    };
+
+    fetchData();
+  }, []);
 
   const studentAnswers: answersInterface[] = [];
 
@@ -89,10 +86,15 @@ const StudentQuiz = () => {
         </div>
 
         {/* Questions */}
-        {questions.map((question, index) => (
-          <QuestionCard key={index} question={question} index={index} handleAnswer={handleAnswer} />
-        ))}
-
+        {questionsData.length > 0 &&
+          questionsData.map((question, index) => (
+            <QuestionCard
+              key={index}
+              question={question}
+              index={index}
+              handleAnswer={handleAnswer}
+            />
+          ))}
         <div className="flex justify-end mt-8">
           <button
             className="bg-blue text-white px-4 py-2 rounded-xl border border-black hover:bg-blue-dark"

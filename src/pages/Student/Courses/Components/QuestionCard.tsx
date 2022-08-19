@@ -33,8 +33,8 @@ const QuestionCard = ({ question, index, isFeedback, handleAnswer }: QuestionCar
         )}
       </div>
       {/* Description */}
-      <p>{question.description}</p>
-      {question.options.map((option, index) => {
+      <p>{question.question}</p>
+      {question.questionOptions.map((option, index) => {
         const answer: answersInterface = {
           questionId: question.id,
           questionOptionId: option.id
@@ -45,7 +45,7 @@ const QuestionCard = ({ question, index, isFeedback, handleAnswer }: QuestionCar
             <div key={index} className="flex items-center gap-2">
               <input
                 type="radio"
-                value={option.value}
+                value={option.option}
                 className={`border-black ${
                   !question.isCorrect && option.isUserAnswer
                     ? "bg-orange-light border-orange-light"
@@ -60,7 +60,7 @@ const QuestionCard = ({ question, index, isFeedback, handleAnswer }: QuestionCar
                 disabled
               />
               <label className={`${!question.isCorrect && option.isUserAnswer && "line-through"}`}>
-                {option.value}
+                {option.option}
               </label>
             </div>
           );
@@ -69,7 +69,7 @@ const QuestionCard = ({ question, index, isFeedback, handleAnswer }: QuestionCar
             <div key={index} className="flex items-center gap-2">
               <input
                 type="radio"
-                value={option.value}
+                value={option.option}
                 className="border-black checked:bg-green checked:border-green"
                 name={`question${question.id}Answer`}
                 onChange={() => {
@@ -78,7 +78,7 @@ const QuestionCard = ({ question, index, isFeedback, handleAnswer }: QuestionCar
                   }
                 }}
               />
-              <label>{option.value}</label>
+              <label>{option.option}</label>
             </div>
           );
         }
