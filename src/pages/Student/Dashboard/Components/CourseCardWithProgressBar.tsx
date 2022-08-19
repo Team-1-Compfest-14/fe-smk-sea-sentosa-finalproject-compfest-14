@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { GiTeacher } from "react-icons/gi";
 import { GrPlay } from "react-icons/gr";
 import { enrolledCourses } from "../../../../typings";
@@ -47,13 +48,13 @@ const CourseCardWithProgressBar = ({
       </div>
       {/* Button */}
       {!isComplete && (
-        <div
+        <Link
+          to={`/student/courses/${courseId}`}
           className="flex flex-col items-center justify-center cursor-pointer p-4 hover:bg-slate-200 hover:rounded-xl"
-          onClick={() => alert(courseId)}
         >
           <GrPlay size={28} />
           <p className="font-bold text-xs mx-2 mt-1">Continue</p>
-        </div>
+        </Link>
       )}
     </div>
   );
