@@ -29,8 +29,8 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <MenuOption text="Pending Instructors" route="/instructors" />
-              <MenuOption text="Pending Courses" route="/courses" />
+              <MenuOption text="Pending Instructors" route="admin/instructors" />
+              <MenuOption text="Pending Courses" route="admin/courses" />
               <Dropdown />
             </>
           )}
