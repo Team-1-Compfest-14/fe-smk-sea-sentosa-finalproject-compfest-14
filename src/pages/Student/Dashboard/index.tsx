@@ -62,30 +62,6 @@ const StudentDashboard = () => {
     fetchData();
   }, []);
 
-  // const enrolledCourses = [
-  //   {
-  //     name: "Introduction to Computer Science",
-  //     instructorName: "John Doe",
-  //     completeSection: 5,
-  //     totalSection: 10,
-  //     isComplete: false
-  //   },
-  //   {
-  //     name: "Introduction to Backend",
-  //     instructorName: "John Doe",
-  //     completeSection: 6,
-  //     totalSection: 10,
-  //     isComplete: false
-  //   },
-  //   {
-  //     name: "Introduction to REST API",
-  //     instructorName: "John Doe",
-  //     completeSection: 6,
-  //     totalSection: 6,
-  //     isComplete: true
-  //   }
-  // ];
-
   return (
     <div className="p-10 flex flex-col items-center justify-center">
       <div className="w-2/3">
