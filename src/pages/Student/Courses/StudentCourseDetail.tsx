@@ -61,7 +61,7 @@ const StudentCourseDetail = () => {
           const tempQuizzes: StudentQuizDetailInterface[] = [];
           course.quizzes.map((item: any) => {
             tempQuizzes.push({
-              id: item.quiz.id,
+              id: item.quiz.quiz.id,
               name: item.quiz.name,
               order: item.quiz.order,
               isComplete: item.isComplete
