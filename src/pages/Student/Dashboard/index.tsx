@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDocumentTitle } from "../../../hooks";
 import { enrolledCourses, studentDashboardHeader } from "../../../typings";
