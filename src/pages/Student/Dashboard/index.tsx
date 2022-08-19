@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useDocumentTitle } from "../../../hooks";
 import { enrolledCourses, studentDashboardHeader } from "../../../typings";
 import { StudentDashboardHeaderCard, CourseCardWithProgressBar } from "./Components";
+import axiosJWT from "../axiosJWT";
 
 const StudentDashboard = () => {
   useDocumentTitle("Dashboard | Pelajarin");
@@ -16,7 +17,7 @@ const StudentDashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await axios
+      await axiosJWT
         .get("http://localhost:5000/courses/dashboard/progress", {
           headers: {
             Authorization: `Bearer ${accessToken}`
@@ -41,21 +42,8 @@ const StudentDashboard = () => {
           });
         })
         .catch(async (err) => {
-          if (err.response.data.message === "JWT expired") {
-            await axios
-              .post("http://localhost:5000/auth/refresh", {
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                }
-              })
-              .then((res) => {
-                localStorage.setItem("accessToken", res.data.data.accessToken);
-                fetchData();
-              });
-          } else {
-            console.log(err);
-            alert("Error");
-          }
+          console.log(err);
+          alert("Error");
         });
     };
 
