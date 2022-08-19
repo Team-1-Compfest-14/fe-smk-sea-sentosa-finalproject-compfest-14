@@ -19,6 +19,7 @@ const StudentQuiz = () => {
 
   const [showConfirmExitModal, setShowConfirmExitModal] = useState(false);
   const [questionsData, setQuestionsData] = useState<QuestionStudent[] | []>([]);
+  const [quizName, setQuizName] = useState("Quiz");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,8 +31,9 @@ const StudentQuiz = () => {
           }
         })
         .then((res) => {
-          const { questions } = res.data.data;
+          const { quizName, questions } = res.data.data;
           setQuestionsData(questions);
+          setQuizName(quizName);
         })
         .catch((err) => {
           if (
@@ -104,7 +106,7 @@ const StudentQuiz = () => {
               size={40}
               className="bg-orange-light rounded-lg border border-black cursor-pointer mr-5"
             />
-            Quiz 1 - Derivatives Practice
+            {quizName}
           </p>
         </div>
 
