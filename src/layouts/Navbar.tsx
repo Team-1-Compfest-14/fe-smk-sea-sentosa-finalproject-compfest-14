@@ -10,12 +10,12 @@ const Navbar = () => {
     const decoded = jwt_decode(user?.accessToken!);
     const { role }: any = decoded;
     return (
-      <div className="bg-orange-light px-10 py-6 border-b border-black flex items-center justify-between top-0 sticky">
+      <div className="bg-orange-light px-10 lg:px-32 py-6 border-b border-black flex items-center justify-between top-0 sticky">
         {/* Logo */}
         <Logo />
 
         {/* Menu */}
-        <div className="flex items-center justify-evenly">
+        <div className="items-center justify-evenly hidden md:flex">
           {role === 0 ? (
             <>
               <MenuOption text="My Courses" route="/student/dashboard" />

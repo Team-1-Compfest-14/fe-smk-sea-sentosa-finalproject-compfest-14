@@ -34,7 +34,7 @@ const InstructorDashboard = () => {
   }, []);
 
   return (
-    <div className="p-10 mx-64 my-5 flex flex-col items-center justify-center">
+    <div className="p-10 my-5 flex flex-col items-center justify-center container mx-auto max-w-screen-lg">
       {/* Header Card */}
       <HeaderCard name={userDetails?.name!} />
       {/* Course Options */}
