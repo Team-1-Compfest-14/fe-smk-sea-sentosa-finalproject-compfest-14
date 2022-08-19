@@ -37,12 +37,10 @@ function AdminVerifyInstructors() {
     });
     const { users } = response.data.data;
     setInstructors(users);
-    console.log(instructors);
     setLoading(false);
   };
 
   const approveHandlingData = async (event: any, userId: any, status: any) => {
-    console.log("hello");
     await axiosJWT.post(
       `http://localhost:8080/approval/users/${userId}`,
       { approved: status },
