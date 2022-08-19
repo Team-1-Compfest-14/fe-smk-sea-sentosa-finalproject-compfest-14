@@ -35,27 +35,53 @@ const QuestionCard = ({ question, index, isFeedback, handleAnswer }: QuestionCar
       {/* Description */}
       <p>{question.description}</p>
       {question.options.map((option, index) => {
-        return (
-          <div key={index} className="flex items-center gap-2">
-            <input
-              type="radio"
-              value={option.value}
-              className="border-black checked:bg-green checked:border-green"
-              name={`question${question.id}Answer`}
-              onChange={() => {
-                const answer: answersInterface = {
-                  questionId: question.id,
-                  questionOptionId: option.id
-                };
+        const answer: answersInterface = {
+          questionId: question.id,
+          questionOptionId: option.id
+        };
 
-                if (handleAnswer) {
-                  handleAnswer(answer);
+        if (isFeedback) {
+          return (
+            <div key={index} className="flex items-center gap-2">
+              <input
+                type="radio"
+                value={option.value}
+                className={`border-black ${
+                  !question.isCorrect && option.isUserAnswer
+                    ? "bg-orange-light border-orange-light"
+                    : "checked:bg-green checked:border-green"
+                }`}
+                name={`question${question.id}Answer`}
+                defaultChecked={
+                  option.isQuestionAnswer || (!question.isCorrect && option.isUserAnswer)
+                    ? true
+                    : false
                 }
-              }}
-            />
-            <label>{option.value}</label>
-          </div>
-        );
+                disabled
+              />
+              <label className={`${!question.isCorrect && option.isUserAnswer && "line-through"}`}>
+                {option.value}
+              </label>
+            </div>
+          );
+        } else {
+          return (
+            <div key={index} className="flex items-center gap-2">
+              <input
+                type="radio"
+                value={option.value}
+                className="border-black checked:bg-green checked:border-green"
+                name={`question${question.id}Answer`}
+                onChange={() => {
+                  if (handleAnswer) {
+                    handleAnswer(answer);
+                  }
+                }}
+              />
+              <label>{option.value}</label>
+            </div>
+          );
+        }
       })}
     </div>
   );

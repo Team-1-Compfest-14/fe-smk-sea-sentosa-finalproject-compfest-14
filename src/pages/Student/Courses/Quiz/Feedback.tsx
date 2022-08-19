@@ -2,18 +2,18 @@ import { useNavigate } from "react-router-dom";
 import { IoChevronBack } from "react-icons/io5";
 import { QuestionCard } from "../Components";
 
-const Feedback = () => {
+const StudentQuizFeedback = () => {
   const questions = [
     {
       id: 0,
       index: 0,
       description: "Test question",
       options: [
-        { id: 0, value: "Option A" },
-        { id: 1, value: "Option B" },
-        { id: 2, value: "Option C" },
-        { id: 3, value: "Option D" },
-        { id: 4, value: "Option E" }
+        { id: 0, value: "Option A", isUserAnswer: true, isQuestionAnswer: false },
+        { id: 1, value: "Option B", isUserAnswer: false, isQuestionAnswer: false },
+        { id: 2, value: "Option C", isUserAnswer: false, isQuestionAnswer: false },
+        { id: 3, value: "Option D", isUserAnswer: false, isQuestionAnswer: false },
+        { id: 4, value: "Option E", isUserAnswer: false, isQuestionAnswer: true }
       ]
     },
     {
@@ -21,23 +21,25 @@ const Feedback = () => {
       index: 1,
       description: "Test question2",
       options: [
-        { id: 0, value: "Option A" },
-        { id: 1, value: "Option B" },
-        { id: 2, value: "Option C" },
-        { id: 3, value: "Option D" },
-        { id: 4, value: "Option E" }
-      ]
+        { id: 0, value: "Option A", isUserAnswer: false, isQuestionAnswer: false },
+        { id: 1, value: "Option B", isUserAnswer: false, isQuestionAnswer: false },
+        { id: 2, value: "Option C", isUserAnswer: true, isQuestionAnswer: false },
+        { id: 3, value: "Option D", isUserAnswer: false, isQuestionAnswer: false },
+        { id: 4, value: "Option E", isUserAnswer: false, isQuestionAnswer: true }
+      ],
+      isCorrect: false
     },
     {
       id: 2,
       index: 2,
       description: "Test question3",
       options: [
-        { id: 0, value: "Option A" },
-        { id: 1, value: "Option B" },
-        { id: 2, value: "Option C" },
-        { id: 3, value: "Option D" }
-      ]
+        { id: 0, value: "Option A", isUserAnswer: false, isQuestionAnswer: false },
+        { id: 1, value: "Option B", isUserAnswer: false, isQuestionAnswer: false },
+        { id: 2, value: "Option C", isUserAnswer: true, isQuestionAnswer: true },
+        { id: 3, value: "Option D", isUserAnswer: false, isQuestionAnswer: false }
+      ],
+      isCorrect: true
     }
   ];
 
@@ -62,12 +64,12 @@ const Feedback = () => {
 
         {/* Questions */}
         {questions.map((question, index) => (
-          <QuestionCard key={index} question={question} index={index} />
+          <QuestionCard key={index} question={question} index={index} isFeedback />
         ))}
 
         <div className="flex justify-end mt-8">
-          <button className="bg-blue text-white px-4 py-2 rounded-xl border border-black hover:bg-blue-dark">
-            Submit
+          <button className="bg-orange-light px-4 py-2 rounded-xl border border-black hover:bg-orange-dark">
+            Finish Review
           </button>
         </div>
       </div>
@@ -75,4 +77,4 @@ const Feedback = () => {
   );
 };
 
-export default Feedback;
+export default StudentQuizFeedback;

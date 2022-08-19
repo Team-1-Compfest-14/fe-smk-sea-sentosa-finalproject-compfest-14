@@ -8,6 +8,7 @@ import StudentCourses from "./Student/Courses";
 import StudentCourseDetail from "./Student/Courses/StudentCourseDetail";
 import StudentDashboard from "./Student/Dashboard";
 import StudentQuiz from "./Student/Courses/Quiz";
+import StudentQuizFeedback from "./Student/Courses/Quiz/Feedback";
 import Page404 from "./Page404";
 import AdminVerifyCourses from "./AdminVerifyCourses";
 import AdminVerifyInstructors from "./AdminVerifyInstructors";
@@ -24,6 +25,7 @@ export {
   StudentCourseDetail,
   StudentDashboard,
   StudentQuiz,
+  StudentQuizFeedback,
   AdminVerifyCourses,
   AdminVerifyInstructors
 };

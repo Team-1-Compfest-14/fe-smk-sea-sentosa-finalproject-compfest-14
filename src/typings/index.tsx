@@ -46,7 +46,9 @@ export type QuestionStudent = {
 export type OptionStudent = {
   id: number;
   value: string;
-  correctAnswer?: boolean;
+  iscorrectAnswer?: boolean;
+  isUserAnswer?: boolean;
+  isQuestionAnswer?: boolean;
 };
 
 export interface answersInterface {
