@@ -2,28 +2,23 @@ import { useForm } from "react-hook-form";
 import { IoChevronBack } from "react-icons/io5";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { lectureValidationSchema } from "../validations/Validations";
-import { Lecture } from "../../../../typings";
 import { Modal } from "../../../../components";
+import { useContext } from "react";
+import { ModuleContext } from "../../../../context";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 interface EditLectureModalProp {
-  lectures: Lecture[];
-  selectedItem: Lecture;
-  // eslint-disable-next-line no-unused-vars
-  setLectures: (params: Lecture[]) => void;
   handleBack: () => void;
 }
 
 interface FormValues {
-  title: string;
-  link: string;
+  name: string;
+  lectureLink: string;
 }
 
-const EditLectureModal = ({
-  handleBack,
-  selectedItem,
-  lectures,
-  setLectures
-}: EditLectureModalProp) => {
+const EditLectureModal = ({ handleBack }: EditLectureModalProp) => {
+  const { selectedLecture } = useContext(ModuleContext);
   const {
     register,
     handleSubmit,
@@ -32,32 +27,40 @@ const EditLectureModal = ({
 
   const formDetails = [
     {
-      displayName: "Title",
-      inputName: "title",
-      defaultValue: selectedItem.title,
+      displayName: "Name",
+      inputName: "name",
+      defaultValue: selectedLecture?.name,
       type: "text",
       placeholder: "History of Indonesia",
-      error: errors?.title?.message
+      error: errors?.name?.message
     },
     {
       displayName: "Redirect Link (include http:// or https://)",
-      inputName: "link",
-      defaultValue: selectedItem.link,
+      inputName: "lectureLink",
+      defaultValue: selectedLecture?.lecture.lectureLink,
       type: "url",
       placeholder: "This can be either a PDF or YouTube link",
-      error: errors?.link?.message
+      error: errors?.lectureLink?.message
     }
   ];
 
+  const { id: courseId } = useParams();
+
   const onSubmit = handleSubmit((data) => {
-    const items = Array.from(lectures);
-    items.splice(selectedItem.index, 1, {
-      ...data,
-      id: selectedItem.id,
-      index: selectedItem.index
-    });
-    setLectures(items);
-    handleBack();
+    const { name, lectureLink } = data;
+    const moduleId = selectedLecture?.lecture.moduleId;
+    axios
+      .put(`http://localhost:5000/courses/${courseId}/modules/${moduleId}/lectures`, {
+        name,
+        lectureLink
+      })
+      .then((res) => {
+        console.log(res.data);
+        alert("Successfully edited lecture!");
+        window.location.reload();
+        handleBack();
+      })
+      .catch((err) => console.log(err));
   });
 
   return (
@@ -68,7 +71,7 @@ const EditLectureModal = ({
           size={28}
           className="bg-orange-light rounded-lg border border-black cursor-pointer"
         />
-        Editing {selectedItem.title}
+        Editing {selectedLecture?.name}
       </p>
       <form onSubmit={onSubmit}>
         {formDetails.map(
@@ -80,7 +83,7 @@ const EditLectureModal = ({
                 placeholder={placeholder}
                 defaultValue={defaultValue}
                 className="border border-black px-3 py-2 rounded-lg w-full"
-                {...register(inputName as "title" | "link")}
+                {...register(inputName as "name" | "lectureLink")}
               />
               <p>{error}</p>
             </div>
@@ -93,7 +96,10 @@ const EditLectureModal = ({
             className="bg-blue text-white px-5 py-2 border border-black rounded-lg"
             value="Save"
           />
-          <button onClick={() => handleBack()} className="px-5 py-2 border border-black rounded-lg">
+          <button
+            onClick={() => handleBack()}
+            className="px-5 py-2 border border-black rounded-lg hover:bg-slate-200"
+          >
             Cancel
           </button>
         </div>

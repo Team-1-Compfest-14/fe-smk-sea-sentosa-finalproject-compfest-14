@@ -2,67 +2,43 @@ import { useForm } from "react-hook-form";
 import { IoChevronBack } from "react-icons/io5";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { quizValidationSchema } from "../validations/Validations";
-import { Quiz } from "../../../../typings";
 import { Modal } from "../../../../components";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { ModuleContext } from "../../../../context";
+import { useContext } from "react";
 
 interface AddQuizModalProp {
-  quizzes: Quiz[];
-  // eslint-disable-next-line no-unused-vars
-  setQuizzes: (params: Quiz[]) => void;
   handleBack: () => void;
 }
 
 interface FormValues {
-  title: string;
-  link: string;
+  name: string;
 }
 
-const AddQuizModal = ({ handleBack, quizzes, setQuizzes }: AddQuizModalProp) => {
+const AddQuizModal = ({ handleBack }: AddQuizModalProp) => {
   const {
     register,
     handleSubmit,
     formState: { errors }
   } = useForm<FormValues>({ resolver: yupResolver(quizValidationSchema) });
 
-  const formDetails = [
-    {
-      displayName: "Title",
-      inputName: "title",
-      type: "text",
-      placeholder: "Integrals Drilling 2",
-      error: errors?.title?.message
-    }
-  ];
+  const { id: courseId } = useParams();
+  const { selectedQuiz } = useContext(ModuleContext);
+  console.log(selectedQuiz);
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
-    const items = Array.from(quizzes);
-    items.push({
-      ...data,
-      index: quizzes.length,
-      id: 1010,
-      questions: [
-        {
-          id: 0,
-          index: 0,
-          description: "This is where you type your question",
-          options: [
-            { id: 0, value: "Option A", correctAnswer: false, mandatory: false },
-            { id: 1, value: "Option B", correctAnswer: false, mandatory: false }
-          ]
-        },
-        {
-          id: 1,
-          index: 1,
-          description: "This is where you type your question",
-          options: [
-            { id: 0, value: "Option A", correctAnswer: false, mandatory: false },
-            { id: 1, value: "Option B", correctAnswer: false, mandatory: false }
-          ]
-        }
-      ]
-    });
-    setQuizzes(items);
+    const { name } = data;
+    axios
+      .post(`http://localhost:5000/courses/${courseId}/quizzes`, {
+        name
+      })
+      .then((res) => {
+        console.log(res.data);
+        alert("Successfully added quiz!");
+        window.location.reload();
+      })
+      .catch((err) => console.log(err));
     handleBack();
   });
 
@@ -82,18 +58,16 @@ const AddQuizModal = ({ handleBack, quizzes, setQuizzes }: AddQuizModalProp) => 
       {/* Form */}
       <form onSubmit={onSubmit}>
         {/* Input */}
-        {formDetails.map(({ displayName, inputName, type, placeholder, error }, index) => (
-          <div className="mb-4" key={index}>
-            <label>{displayName}</label>
-            <input
-              type={type}
-              placeholder={placeholder}
-              className="border border-black px-3 py-2 rounded-lg w-full"
-              {...register(inputName as "title" | "link")}
-            />
-            <p>{error}</p>
-          </div>
-        ))}
+        <div className="mb-4">
+          <label>Name</label>
+          <input
+            type="text"
+            placeholder="Integrals Drilling"
+            className="border border-black px-3 py-2 rounded-lg w-full"
+            {...register("name")}
+          />
+          <p>{errors?.name?.message}</p>
+        </div>
         {/* Buttons */}
         <div className="flex flex-1 flex-col gap-2 mt-4">
           <input
@@ -101,7 +75,10 @@ const AddQuizModal = ({ handleBack, quizzes, setQuizzes }: AddQuizModalProp) => 
             className="bg-blue text-white px-5 py-2 border border-black rounded-lg"
             value="Add"
           />
-          <button onClick={() => handleBack()} className="px-5 py-2 border border-black rounded-lg">
+          <button
+            onClick={() => handleBack()}
+            className="px-5 py-2 border border-black rounded-lg hover:bg-slate-200"
+          >
             Cancel
           </button>
         </div>

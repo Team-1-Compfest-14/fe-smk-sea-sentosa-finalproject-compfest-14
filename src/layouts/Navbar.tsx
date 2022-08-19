@@ -18,13 +18,13 @@ const Navbar = () => {
         <div className="flex items-center justify-evenly">
           {role === 0 ? (
             <>
-              <MenuOption text="My Courses" route="/dashboard" />
-              <MenuOption text="All Courses" route="/courses" />
+              <MenuOption text="My Courses" route="/student/dashboard" />
+              <MenuOption text="All Courses" route="/student/courses" />
               <Dropdown />
             </>
           ) : role === 1 ? (
             <>
-              <MenuOption text="My Courses" route="/dashboard" />
+              <MenuOption text="My Courses" route="/instructor/dashboard" />
               <Dropdown />
             </>
           ) : (

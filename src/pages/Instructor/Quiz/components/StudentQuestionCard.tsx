@@ -1,25 +1,21 @@
 /* eslint-disable no-unused-vars */
 import { MdDeleteForever, MdDragIndicator, MdModeEdit } from "react-icons/md";
-import { Question } from "../../../../typings";
 import { DraggableProvided } from "@hello-pangea/dnd";
+import { useContext } from "react";
+import { QuizContext } from "../../../../context";
 
 interface StudentQuestionCardProp {
   provided: DraggableProvided;
-  question: Question;
   index: number;
-  setSelectedQuestion(param: Question): void;
-  setShowConfirmDeleteQuestionModal(param: boolean): void;
-  setShowEditQuestionModal(param: boolean): void;
 }
 
-const StudentQuestionCard = ({
-  provided,
-  question,
-  index,
-  setSelectedQuestion,
-  setShowConfirmDeleteQuestionModal,
-  setShowEditQuestionModal
-}: StudentQuestionCardProp) => {
+const StudentQuestionCard = ({ provided, index }: StudentQuestionCardProp) => {
+  const {
+    selectedQuestion,
+    setSelectedQuestion,
+    setShowEditQuestionModal,
+    setShowConfirmDeleteQuestionModal
+  } = useContext(QuizContext);
   return (
     <div
       className="bg-white border border-black rounded-xl px-8 py-4 flex flex-col gap-4 mt-4"
@@ -40,7 +36,7 @@ const StudentQuestionCard = ({
           <div
             className="text-sm flex flex-col items-center justify-center cursor-pointer p-2 hover:bg-slate-200 hover:rounded-xl"
             onClick={() => {
-              setSelectedQuestion({ ...question, index });
+              setSelectedQuestion(selectedQuestion!);
               setShowEditQuestionModal(true);
             }}
           >
@@ -51,7 +47,7 @@ const StudentQuestionCard = ({
           <div
             className="text-sm flex flex-col items-center justify-center cursor-pointer p-2 hover:bg-slate-200 hover:rounded-xl text-red-600"
             onClick={() => {
-              setSelectedQuestion({ ...question, index });
+              setSelectedQuestion(selectedQuestion!);
               setShowConfirmDeleteQuestionModal(true);
             }}
           >
@@ -61,17 +57,17 @@ const StudentQuestionCard = ({
         </div>
       </div>
       {/* Description */}
-      <p>{question.description}</p>
-      {question.options.map((option, index) => (
+      <p>{selectedQuestion?.question}</p>
+      {selectedQuestion?.questionOptions.map((option, index) => (
         <div key={index} className="flex items-center gap-2">
           <input
             type="checkbox"
             disabled
-            value={option.value}
+            value={option.option}
             className="border-black checked:bg-green rounded-full"
-            defaultChecked={option.correctAnswer ? true : false}
+            defaultChecked={option.isCorrectAnswer ? true : false}
           />
-          <label>{option.value}</label>
+          <label>{option.option}</label>
         </div>
       ))}
     </div>

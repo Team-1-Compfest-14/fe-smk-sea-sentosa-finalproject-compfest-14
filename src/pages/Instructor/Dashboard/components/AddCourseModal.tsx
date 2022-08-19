@@ -28,8 +28,10 @@ const AddCourseModal = ({ handleBack }: AddCourseModalProp) => {
         name,
         description
       })
+      // eslint-disable-next-line no-unused-vars
       .then((res) => {
-        console.log(res.data);
+        alert("Successfully created a new course!");
+        window.location.reload();
         handleBack();
       })
       .catch((err) => console.log(err));

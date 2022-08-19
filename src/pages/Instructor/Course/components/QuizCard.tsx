@@ -1,25 +1,34 @@
 /* eslint-disable no-unused-vars */
 import { MdDeleteForever, MdDragIndicator, MdModeEdit } from "react-icons/md";
-import { Quiz } from "../../../../typings";
 import { DraggableProvided } from "@hello-pangea/dnd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { ModuleContext } from "../../../../context";
+import axios from "axios";
+import { Quiz, QuizData } from "../../../../typings";
 
 interface QuizCardProp {
   provided: DraggableProvided;
-  quiz: Quiz;
   index: number;
-  setSelectedItem(param: Quiz): void;
-  setShowConfirmDeleteQuizModal(param: boolean): void;
+  quiz: Quiz;
 }
 
-const QuizCard = ({
-  provided,
-  quiz,
-  index,
-  setSelectedItem,
-  setShowConfirmDeleteQuizModal
-}: QuizCardProp) => {
+const QuizCard = ({ provided, index, quiz }: QuizCardProp) => {
   const navigate = useNavigate();
+  const { setSelectedQuiz, setShowConfirmDeleteQuizModal } = useContext(ModuleContext);
+  const { id: courseId } = useParams();
+  const quizId = quiz?.quiz?.id;
+
+  const [quizData, setQuizData] = useState<QuizData | null>(null);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/courses/${courseId}/quizzes/${quizId}`)
+      .then((res) => {
+        const { data } = res.data;
+        setQuizData(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
   return (
     <div
       className="bg-white border border-black rounded-xl px-8 py-2 flex items-center justify-between mt-4"
@@ -31,8 +40,8 @@ const QuizCard = ({
       <div className="flex items-center gap-5">
         <MdDragIndicator size={32} />
         <div>
-          <p className="text-xl font-bold">{quiz.title}</p>
-          <p>{quiz.questions.length} questions</p>
+          <p className="text-xl font-bold">{quizData?.quizName}</p>
+          <p>{quizData?.questions.length} questions</p>
         </div>
       </div>
       {/* Buttons */}
@@ -51,7 +60,7 @@ const QuizCard = ({
         <div
           className="text-sm flex flex-col items-center justify-center cursor-pointer p-2 hover:bg-slate-200 hover:rounded-xl text-red-600"
           onClick={() => {
-            setSelectedItem({ ...quiz, index });
+            setSelectedQuiz(quiz);
             setShowConfirmDeleteQuizModal(true);
           }}
         >

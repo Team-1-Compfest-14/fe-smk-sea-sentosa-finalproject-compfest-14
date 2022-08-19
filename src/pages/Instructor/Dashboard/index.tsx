@@ -1,32 +1,42 @@
 import axios from "axios";
-import jwt_decode from "jwt-decode";
 import { useDocumentTitle } from "../../../hooks";
 import { CourseCard, HeaderCard } from "../../../components";
 import { useContext, useEffect, useState } from "react";
 import { AddCourseModal } from "./components";
-import { LoginContext } from "../../../context";
-import { Course } from "../../../typings";
+import { CourseContext } from "../../../context";
+import { UserDetails } from "../../../typings";
 
 const InstructorDashboard = () => {
-  const [courses, setCourses] = useState<Course[] | null>(null);
+  const { courses, setCourses } = useContext(CourseContext);
+
   const [showVerified, setShowVerified] = useState(true);
   const [showAddCourse, setShowAddCourse] = useState(false);
-  const { user } = useContext(LoginContext);
-  const decoded = jwt_decode(user?.accessToken!);
-  const { userId }: any = decoded;
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
 
-  useDocumentTitle(`${userId}'s Courses | Pelajarin`);
+  useDocumentTitle(`${userDetails?.name}'s Courses | Pelajarin`);
   useEffect(() => {
-    axios.get("http://localhost:5000/courses/instructor/own").then((res) => {
-      const { courses } = res.data.data;
-      setCourses(courses);
-    });
+    window.scrollTo(0, 0);
+    axios
+      .get("http://localhost:5000/courses/instructor/own")
+      .then((res) => {
+        const { courses } = res.data.data;
+        setCourses(courses);
+      })
+      .catch((err) => console.log(err));
+
+    axios
+      .get("http://localhost:5000/users/profile")
+      .then((res) => {
+        const { user } = res.data.data;
+        setUserDetails(user);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
     <div className="p-10 mx-64 my-5 flex flex-col items-center justify-center">
       {/* Header Card */}
-      <HeaderCard name={userId} />
+      <HeaderCard name={userDetails?.name!} />
       {/* Course Options */}
       <div className="flex w-full items-center justify-evenly my-4">
         <button
@@ -51,29 +61,19 @@ const InstructorDashboard = () => {
         </button>
       </div>
       {/* Courses */}
-      {showVerified
-        ? courses
-            ?.filter((course) => course.isVerified === true)
-            .map((course, index) => (
-              <CourseCard
-                key={index}
-                id={course.id}
-                title={course.name}
-                numOfStudents={0}
-                numOfSections={0}
-              />
-            ))
-        : courses
-            ?.filter((course) => course.isVerified === false)
-            .map((course, index) => (
-              <CourseCard
-                key={index}
-                id={course.id}
-                title={course.name}
-                numOfStudents={course.total}
-                numOfSections={0}
-              />
-            ))}
+      {courses
+        ?.filter((course) =>
+          showVerified ? course.isVerified === true : course.isVerified === false
+        )
+        .map((course, index) => (
+          <CourseCard
+            key={index}
+            id={course.id}
+            name={course.name}
+            numOfStudents={course.total}
+            numOfSections={0}
+          />
+        ))}
       {/* Add Course Button */}
       {!showVerified && (
         <div className="flex justify-end w-full">

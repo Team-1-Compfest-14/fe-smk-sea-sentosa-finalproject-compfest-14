@@ -5,20 +5,20 @@ import { useNavigate } from "react-router-dom";
 
 interface CourseCardProps {
   id: number;
-  title: string;
+  name: string;
   numOfStudents: number;
   numOfSections: number;
   // eslint-disable-next-line no-unused-vars
 }
 
-const CourseCard = ({ id, title, numOfStudents, numOfSections }: CourseCardProps) => {
+const CourseCard = ({ id, name, numOfStudents, numOfSections }: CourseCardProps) => {
   const navigate = useNavigate();
   return (
     <div className="h-40 border w-full border-black rounded-2xl flex justify-between items-center my-4 px-10">
       {/* Details */}
       <div className="my-auto flex justify-between items-center">
         <div>
-          <p className="text-2xl font-bold mb-2">{title}</p>
+          <p className="text-2xl font-bold mb-2">{name}</p>
           <p className="flex items-center">
             <MdBackpack className="mr-2" size={20} />
             {numOfStudents ? numOfStudents : "No"} students enrolled
@@ -33,7 +33,7 @@ const CourseCard = ({ id, title, numOfStudents, numOfSections }: CourseCardProps
       <div
         className="flex flex-col items-center justify-center cursor-pointer p-4 hover:bg-slate-200 hover:rounded-xl"
         onClick={() => {
-          navigate(`/courses/${id}`);
+          navigate(`/instructor/courses/${id}`);
         }}
       >
         <MdModeEdit size={32} />

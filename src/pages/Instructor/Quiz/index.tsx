@@ -1,7 +1,8 @@
 import { DragDropContext, Draggable, Droppable, DropResult } from "@hello-pangea/dnd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { QuizContext } from "../../../context";
 import { Question } from "../../../typings";
 import {
   AddQuestionModal,
@@ -10,63 +11,34 @@ import {
   EditQuestionModal,
   StudentQuestionCard
 } from "./components";
+import axios from "axios";
 
 const InstructorQuiz = () => {
-  const [showCompactView, setShowCompactView] = useState(false);
-  const [selectedQuestion, setSelectedQuestion] = useState<Question>({
-    id: 0,
-    index: 0,
-    description: "Test question",
-    options: [
-      { id: 0, value: "Option A", correctAnswer: true, mandatory: true },
-      { id: 1, value: "Option B", correctAnswer: false, mandatory: true },
-      { id: 2, value: "Option C", correctAnswer: false, mandatory: true },
-      { id: 3, value: "Option D", correctAnswer: false, mandatory: true },
-      { id: 4, value: "Option E", correctAnswer: false, mandatory: true }
-    ]
-  });
+  const [questions, setQuestions] = useState<Question[] | null>(null);
+  const { courseId, quizId } = useParams();
+
+  const getQuestions = () => {
+    axios
+      .get(`http://localhost:5000/courses/${courseId}/quizzes/${quizId}`)
+      .then((res) => {
+        const { questions } = res.data.data;
+        setQuestions(questions);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    getQuestions();
+  }, []);
+
+  const [showCompactView, setShowCompactView] = useState(true);
+  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
   const [showEditQuestionModal, setShowEditQuestionModal] = useState(false);
   const [showConfirmDeleteQuestionModal, setShowConfirmDeleteQuestionModal] = useState(false);
-  const [questions, setQuestions] = useState([
-    {
-      id: 0,
-      index: 0,
-      description: "Test question",
-      options: [
-        { id: 0, value: "Option A", correctAnswer: true, mandatory: true },
-        { id: 1, value: "Option B", correctAnswer: false, mandatory: true },
-        { id: 2, value: "Option C", correctAnswer: false, mandatory: true },
-        { id: 3, value: "Option D", correctAnswer: false, mandatory: true },
-        { id: 4, value: "Option E", correctAnswer: false, mandatory: true }
-      ]
-    },
-    {
-      id: 1,
-      index: 1,
-      description: "Test question2",
-      options: [
-        { id: 0, value: "Option A", correctAnswer: false, mandatory: true },
-        { id: 1, value: "Option B", correctAnswer: false, mandatory: true },
-        { id: 2, value: "Option C", correctAnswer: true, mandatory: true },
-        { id: 3, value: "Option D", correctAnswer: false, mandatory: true },
-        { id: 4, value: "Option E", correctAnswer: false, mandatory: true }
-      ]
-    },
-    {
-      id: 2,
-      index: 2,
-      description: "Test question3",
-      options: [
-        { id: 0, value: "Option A", correctAnswer: false, mandatory: true },
-        { id: 1, value: "Option B", correctAnswer: false, mandatory: true },
-        { id: 2, value: "Option C", correctAnswer: false, mandatory: true },
-        { id: 3, value: "Option D", correctAnswer: false, mandatory: true },
-        { id: 4, value: "Option E", correctAnswer: true, mandatory: true }
-      ]
-    }
-  ]);
   const navigate = useNavigate();
+
   const handleBackModal = (action: "add" | "edit" | "delete") => {
     document.body.style.overflow = "auto";
     switch (action) {
@@ -82,34 +54,11 @@ const InstructorQuiz = () => {
     }
   };
 
-  const addQuestionModalProps = {
-    handleBack: () => handleBackModal("add"),
-    setQuestions,
-    questions
-  };
-  const editQuestionModalProps = {
-    handleBack: () => handleBackModal("edit"),
-    selectedQuestion: selectedQuestion as Question,
-    setQuestions,
-    questions
-  };
-  const confirmDeleteQuestionModalProps = {
-    handleBack: () => handleBackModal("delete"),
-    selectedQuestion,
-    questions,
-    setItems: setQuestions
-  };
-  const compactQuestionCardProps = {
-    setSelectedQuestion,
-    setShowEditQuestionModal,
-    setShowConfirmDeleteQuestionModal
-  };
-
   const onDragEnd = ({ destination, source }: DropResult) => {
     if (!destination) return;
     if (destination.droppableId === source.droppableId && destination.index === source.index)
       return;
-    const items = Array.from(questions);
+    const items = Array.from(questions!);
     const moved = items[source.index];
     items.splice(source.index, 1);
     items.splice(destination.index, 0, moved);
@@ -117,95 +66,106 @@ const InstructorQuiz = () => {
   };
 
   return (
-    <div className="container mx-auto p-10 max-w-screen-lg">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <p className="font-bold text-xl flex gap-3">
-          <IoChevronBack
+    <QuizContext.Provider
+      value={{
+        questions,
+        setQuestions,
+        selectedQuestion,
+        setSelectedQuestion,
+        setShowEditQuestionModal,
+        setShowConfirmDeleteQuestionModal
+      }}
+    >
+      <div className="container mx-auto p-10 max-w-screen-lg">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <p className="font-bold text-xl flex gap-3">
+            <IoChevronBack
+              onClick={() => {
+                navigate(-1);
+              }}
+              size={28}
+              className="bg-orange-light rounded-lg border border-black cursor-pointer"
+            />
+            Quiz 1 - Derivatives Practice
+          </p>
+          <button className="bg-blue text-white px-4 py-2 rounded-lg border border-black">
+            Edit Name
+          </button>
+        </div>
+        {/* View Options */}
+        <div className="container flex justify-around my-8">
+          <button
+            onClick={() => setShowCompactView(true)}
+            className={`px-4 py-2 border border-black rounded-lg hover:bg-slate-400 ${
+              showCompactView && "bg-orange-light hover:bg-orange-dark"
+            }`}
+          >
+            Compact View
+          </button>
+          <button
+            onClick={() => setShowCompactView(false)}
+            className={`px-4 py-2 border border-black rounded-lg hover:bg-slate-400 ${
+              !showCompactView && "bg-orange-light hover:bg-orange-dark"
+            }`}
+          >
+            Student View
+          </button>
+        </div>
+        {/* Question Cards */}
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="questions">
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {showCompactView
+                  ? questions?.map((question, index) => (
+                      <Draggable
+                        key={question.id}
+                        draggableId={question.id.toString()}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <CompactQuestionCard
+                            provided={provided}
+                            index={index}
+                            question={question}
+                          />
+                        )}
+                      </Draggable>
+                    ))
+                  : questions?.map((question, index) => (
+                      <Draggable
+                        key={question.id}
+                        draggableId={question.id.toString()}
+                        index={index}
+                      >
+                        {(provided) => <StudentQuestionCard provided={provided} index={index} />}
+                      </Draggable>
+                    ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+        {/* Add Item Button */}
+        <div className="flex justify-end mt-8">
+          <button
             onClick={() => {
-              navigate(-1);
+              document.body.style.overflow = "hidden";
+              setShowAddQuestionModal(true);
             }}
-            size={28}
-            className="bg-orange-light rounded-lg border border-black cursor-pointer"
-          />
-          Quiz 1 - Derivatives Practice
-        </p>
-        <button className="bg-blue text-white px-4 py-2 rounded-lg border border-black">
-          Edit Name
-        </button>
+            className="bg-blue text-white px-4 py-2 rounded-xl border border-black hover:bg-blue-dark"
+          >
+            Add Question
+          </button>
+        </div>
+        {showAddQuestionModal && <AddQuestionModal handleBack={() => handleBackModal("add")} />}
+        {showEditQuestionModal && <EditQuestionModal handleBack={() => handleBackModal("edit")} />}
+        {showConfirmDeleteQuestionModal && (
+          <ConfirmDeleteQuestionModal handleBack={() => handleBackModal("delete")} />
+        )}
       </div>
-      {/* View Options */}
-      <div className="container flex justify-around my-8">
-        <button
-          onClick={() => setShowCompactView(true)}
-          className={`px-4 py-2 border border-black rounded-lg hover:bg-slate-400 ${
-            showCompactView && "bg-orange-light hover:bg-orange-dark"
-          }`}
-        >
-          Compact View
-        </button>
-        <button
-          onClick={() => setShowCompactView(false)}
-          className={`px-4 py-2 border border-black rounded-lg hover:bg-slate-400 ${
-            !showCompactView && "bg-orange-light hover:bg-orange-dark"
-          }`}
-        >
-          Student View
-        </button>
-      </div>
-      {/* Question Cards */}
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="lectures">
-          {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {showCompactView
-                ? questions.map((question, index) => (
-                    <Draggable key={question.id} draggableId={question.id.toString()} index={index}>
-                      {(provided) => (
-                        <CompactQuestionCard
-                          provided={provided}
-                          index={index}
-                          question={question}
-                          {...compactQuestionCardProps}
-                        />
-                      )}
-                    </Draggable>
-                  ))
-                : questions.map((question, index) => (
-                    <Draggable key={question.id} draggableId={question.id.toString()} index={index}>
-                      {(provided) => (
-                        <StudentQuestionCard
-                          provided={provided}
-                          index={index}
-                          question={question}
-                          {...compactQuestionCardProps}
-                        />
-                      )}
-                    </Draggable>
-                  ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-      {/* Add Item Button */}
-      <div className="flex justify-end mt-8">
-        <button
-          onClick={() => {
-            document.body.style.overflow = "hidden";
-            setShowAddQuestionModal(true);
-          }}
-          className="bg-blue text-white px-4 py-2 rounded-xl border border-black hover:bg-blue-dark"
-        >
-          Add Question
-        </button>
-      </div>
-      {showAddQuestionModal && <AddQuestionModal {...addQuestionModalProps} />}
-      {showEditQuestionModal && <EditQuestionModal {...editQuestionModalProps} />}
-      {showConfirmDeleteQuestionModal && (
-        <ConfirmDeleteQuestionModal {...confirmDeleteQuestionModalProps} />
-      )}
-    </div>
+    </QuizContext.Provider>
   );
 };
 

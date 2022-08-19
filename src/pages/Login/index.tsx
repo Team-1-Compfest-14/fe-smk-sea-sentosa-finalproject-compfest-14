@@ -39,8 +39,10 @@ const Login = () => {
       setUser({ accessToken: accessToken });
       if (role === 2) {
         navigate("/admin/instructors");
+      } else if (role === 1) {
+        navigate("/instructor/dashboard");
       } else {
-        navigate("/dashboard");
+        navigate("/student/dashboard");
       }
     } else {
       console.log("error");

@@ -1,26 +1,20 @@
 /* eslint-disable no-unused-vars */
 import { MdDeleteForever, MdDragIndicator, MdModeEdit } from "react-icons/md";
 import { AiOutlineEye } from "react-icons/ai";
-import { Lecture } from "../../../../typings";
 import { DraggableProvided } from "@hello-pangea/dnd";
+import { useContext } from "react";
+import { ModuleContext } from "../../../../context";
+import { Lecture } from "../../../../typings";
 
 interface LectureCardProp {
   provided: DraggableProvided;
-  lecture: Lecture;
   index: number;
-  setSelectedItem(param: Lecture): void;
-  setShowEditLectureModal(param: boolean): void;
-  setShowConfirmDeleteLectureModal(param: boolean): void;
+  lecture: Lecture;
 }
 
-const LectureCard = ({
-  provided,
-  lecture,
-  index,
-  setSelectedItem,
-  setShowConfirmDeleteLectureModal,
-  setShowEditLectureModal
-}: LectureCardProp) => {
+const LectureCard = ({ provided, index, lecture }: LectureCardProp) => {
+  const { setSelectedLecture, setShowEditLectureModal, setShowConfirmDeleteLectureModal } =
+    useContext(ModuleContext);
   return (
     <div
       className="bg-white border border-black rounded-xl px-8 py-2 flex items-center justify-between mt-4"
@@ -31,13 +25,17 @@ const LectureCard = ({
       {/* Drag Icon and Title */}
       <div className="flex items-center gap-5">
         <MdDragIndicator size={32} />
-        <p className="text-xl font-bold">{lecture.title}</p>
+        <p className="text-xl font-bold">{lecture.name}</p>
       </div>
       {/* Buttons */}
       <div className="flex gap-4">
         {/* Preview Button */}
         <div
-          onClick={() => window.open(lecture.link, "_blank")}
+          onClick={() => {
+            console.log(lecture);
+            const { lectureLink } = lecture.lecture;
+            window.open(lectureLink, "_blank");
+          }}
           className="text-sm flex flex-col items-center justify-center cursor-pointer p-2 hover:bg-slate-200 hover:rounded-xl"
         >
           <AiOutlineEye size={32} />
@@ -47,7 +45,7 @@ const LectureCard = ({
         <div
           className="text-sm flex flex-col items-center justify-center cursor-pointer p-2 hover:bg-slate-200 hover:rounded-xl"
           onClick={() => {
-            setSelectedItem({ ...lecture, index });
+            setSelectedLecture(lecture);
             setShowEditLectureModal(true);
           }}
         >
@@ -58,7 +56,7 @@ const LectureCard = ({
         <div
           className="text-sm flex flex-col items-center justify-center cursor-pointer p-2 hover:bg-slate-200 hover:rounded-xl text-red-600"
           onClick={() => {
-            setSelectedItem({ ...lecture, index });
+            setSelectedLecture(lecture);
             setShowConfirmDeleteLectureModal(true);
           }}
         >

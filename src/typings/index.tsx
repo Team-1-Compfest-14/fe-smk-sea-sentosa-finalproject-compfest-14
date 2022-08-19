@@ -2,6 +2,11 @@ export type User = {
   accessToken: string | null;
 };
 
+export type UserDetails = {
+  name: string;
+  email: string;
+};
+
 export type Course = {
   id: number;
   instructorId: number;
@@ -13,28 +18,36 @@ export type Course = {
 
 export type Lecture = {
   id: number;
-  title: string;
-  link: string;
-  index: number;
+  courseId: number;
+  lecture: { id: number; moduleId: number; lectureLink: string };
+  name: string;
+  order: number;
+  type: number;
 };
 
 export type Option = {
-  id: number;
-  value: string;
-  correctAnswer: boolean;
-  mandatory: boolean;
+  option: string;
+  isCorrectAnswer: boolean;
 };
 
 export type Question = {
   id: number;
+  quizId: number;
   index: number;
-  description: string;
-  options: Option[];
+  question: string;
+  questionOptions: Option[];
 };
 
 export type Quiz = {
   id: number;
-  title: string;
-  questions: Question[];
-  index: number;
+  courseId: number;
+  name: string;
+  order: number;
+  quiz: { id: number; moduleId: number };
+  type: number;
+};
+
+export type QuizData = {
+  quizName: string;
+  questions: { id: number }[];
 };

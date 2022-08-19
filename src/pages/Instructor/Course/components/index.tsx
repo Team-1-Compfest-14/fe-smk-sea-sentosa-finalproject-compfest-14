@@ -1,19 +1,19 @@
 import AddLectureModal from "./AddLectureModal";
 import AddQuizModal from "./AddQuizModal";
 import EditLectureModal from "./EditLectureModal";
-import ConfirmDeleteItemModal from "./ConfirmDeleteItemModal";
+import ConfirmDeleteQuizModal from "./ConfirmDeleteQuizModal";
+import ConfirmDeleteLectureModal from "./ConfirmDeleteLectureModal";
 import CourseDetailHeaderCard from "./CourseDetailHeaderCard";
 import LectureCard from "./LectureCard";
 import QuizCard from "./QuizCard";
-import EditCourseModal from "./EditCourseModal";
 
 export {
   AddLectureModal,
   AddQuizModal,
   EditLectureModal,
-  ConfirmDeleteItemModal,
+  ConfirmDeleteQuizModal,
+  ConfirmDeleteLectureModal,
   CourseDetailHeaderCard,
   LectureCard,
-  QuizCard,
-  EditCourseModal
+  QuizCard
 };

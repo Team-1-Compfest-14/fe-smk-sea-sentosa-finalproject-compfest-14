@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { LoginContext } from "../../context";
+import { CourseContext, LoginContext } from "../../context";
 import { Footer, Navbar } from "../../layouts";
 import {
   Home,
@@ -14,34 +14,46 @@ import {
   AdminVerifyInstructors,
   InstructorQuiz
 } from "../../pages";
-import { User } from "../../typings";
+import { Course, User } from "../../typings";
 
 const Router = () => {
   const [user, setUser] = useState<User>({
     accessToken: localStorage.getItem("accessToken") ?? null
   });
 
+  const [courses, setCourses] = useState<Course[] | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+
   axios.defaults.headers.common["Authorization"] = `Bearer ${user?.accessToken}`;
 
   return (
     <BrowserRouter>
       <LoginContext.Provider value={{ user, setUser }}>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/admin/courses" element={<AdminVerifyCourses />} />
-          <Route path="/admin/instructors" element={<AdminVerifyInstructors />} />
-          <Route
-            path="/dashboard"
-            element={user?.accessToken !== null ? <InstructorDashboard /> : <Login />}
-          />
-          <Route path="/courses/:id" element={<InstructorCourse />} />
-          <Route path="/courses/:id/quizzes/:id" element={<InstructorQuiz />} />
-          <Route path="*" element={<Page404 />} />
-        </Routes>
-        <Footer />
+        <CourseContext.Provider value={{ courses, setCourses, selectedCourse, setSelectedCourse }}>
+          {/* idea https://stackoverflow.com/questions/59812003/tailwindcss-fixed-sticky-footer-on-the-bottom */}
+          <div className="flex flex-col w-full h-screen justify-between">
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/admin/courses" element={<AdminVerifyCourses />} />
+              <Route path="/admin/instructors" element={<AdminVerifyInstructors />} />
+              <Route
+                path="/instructor/dashboard"
+                element={user?.accessToken !== null ? <InstructorDashboard /> : <Login />}
+              />
+              <Route path="/instructor/courses/:id" element={<InstructorCourse />} />
+              <Route
+                path="/instructor/courses/:courseId/quizzes/:quizId"
+                element={<InstructorQuiz />}
+              />
+
+              <Route path="*" element={<Page404 />} />
+            </Routes>
+            <Footer />
+          </div>
+        </CourseContext.Provider>
       </LoginContext.Provider>
     </BrowserRouter>
   );

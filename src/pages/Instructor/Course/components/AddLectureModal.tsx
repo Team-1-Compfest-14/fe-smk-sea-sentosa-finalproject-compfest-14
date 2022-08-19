@@ -1,23 +1,21 @@
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import { IoChevronBack } from "react-icons/io5";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { lectureValidationSchema } from "../validations/Validations";
-import { Lecture } from "../../../../typings";
 import { Modal } from "../../../../components";
+import { useParams } from "react-router-dom";
 
 interface AddLectureModalProp {
-  lectures: Lecture[];
-  // eslint-disable-next-line no-unused-vars
-  setLectures: (params: Lecture[]) => void;
   handleBack: () => void;
 }
 
 interface FormValues {
-  title: string;
-  link: string;
+  name: string;
+  lectureLink: string;
 }
 
-const AddLectureModal = ({ handleBack, lectures, setLectures }: AddLectureModalProp) => {
+const AddLectureModal = ({ handleBack }: AddLectureModalProp) => {
   const {
     register,
     handleSubmit,
@@ -26,26 +24,37 @@ const AddLectureModal = ({ handleBack, lectures, setLectures }: AddLectureModalP
 
   const formDetails = [
     {
-      displayName: "Title",
-      inputName: "title",
+      displayName: "Name",
+      inputName: "name",
       type: "text",
       placeholder: "History of Indonesia",
-      error: errors?.title?.message
+      error: errors?.name?.message
     },
     {
-      displayName: "Redirect Link (include http:// or https://)",
-      inputName: "link",
+      displayName: "Lecture Link (include http:// or https://)",
+      inputName: "lectureLink",
       type: "url",
       placeholder: "This can be either a PDF or YouTube link",
-      error: errors?.link?.message
+      error: errors?.lectureLink?.message
     }
   ];
 
+  const { id: courseId } = useParams();
+
   const onSubmit = handleSubmit((data) => {
-    const items = Array.from(lectures);
-    items.push({ ...data, index: lectures.length, id: 1010 });
-    setLectures(items);
-    handleBack();
+    const { name, lectureLink } = data;
+    axios
+      .post(`http://localhost:5000/courses/${courseId}/lectures`, {
+        name,
+        lectureLink
+      })
+      .then((res) => {
+        console.log(res.data);
+        window.location.reload();
+        alert("Successfully created a new lecture!");
+        handleBack();
+      })
+      .catch((err) => console.log(err));
   });
 
   return (
@@ -55,7 +64,7 @@ const AddLectureModal = ({ handleBack, lectures, setLectures }: AddLectureModalP
         <IoChevronBack
           onClick={() => handleBack()}
           size={28}
-          className="bg-orange-light rounded-lg border border-black cursor-pointer"
+          className="bg-orange-light rounded-lg border border-black cursor-pointer hover:bg-orange-dark"
         />
         Adding a new course
       </p>
@@ -69,7 +78,7 @@ const AddLectureModal = ({ handleBack, lectures, setLectures }: AddLectureModalP
               type={type}
               placeholder={placeholder}
               className="border border-black px-3 py-2 rounded-lg w-full"
-              {...register(inputName as "title" | "link")}
+              {...register(inputName as "name" | "lectureLink")}
             />
             <p>{error}</p>
           </div>
@@ -78,10 +87,13 @@ const AddLectureModal = ({ handleBack, lectures, setLectures }: AddLectureModalP
         <div className="flex flex-1 flex-col gap-2 mt-4">
           <input
             type="submit"
-            className="bg-blue text-white px-5 py-2 border border-black rounded-lg"
+            className="bg-blue text-white px-5 py-2 border border-black rounded-lg hover:bg-blue-dark cursor-pointer"
             value="Add"
           />
-          <button onClick={() => handleBack()} className="px-5 py-2 border border-black rounded-lg">
+          <button
+            onClick={() => handleBack()}
+            className="px-5 py-2 border border-black rounded-lg hover:bg-slate-200"
+          >
             Cancel
           </button>
         </div>
