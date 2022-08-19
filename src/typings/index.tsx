@@ -38,3 +38,63 @@ export type Quiz = {
   questions: Question[];
   index: number;
 };
+
+export type QuestionStudent = {
+  id: number;
+  question: string;
+  questionOptions: OptionStudent[];
+  isCorrect?: boolean;
+};
+
+export type OptionStudent = {
+  id: number;
+  option: string;
+  iscorrectAnswer?: boolean;
+  isUserAnswer?: boolean;
+  isQuestionAnswer?: boolean;
+};
+
+export interface answersInterface {
+  questionId: number;
+  questionOptionId: number;
+}
+
+export interface enrolledCourses {
+  name: string;
+  teacher: string;
+  totalModule: number;
+  totalModuleCompletion: number;
+  isComplete: boolean;
+  courseId: number;
+}
+
+export interface studentDashboardHeader {
+  name: string;
+  totalActive: number;
+  totalComplete: number;
+}
+
+export interface StudentLectureDetailInterface {
+  id: number;
+  name: string;
+  order: number;
+  lectureLink: string;
+  isComplete: boolean;
+}
+
+export interface StudentQuizDetailInterface {
+  id: number;
+  name: string;
+  order: number;
+  isComplete: boolean;
+}
+
+export interface StudentCourseDetailHeaderInterface {
+  name: string;
+  instructorName: string;
+  description: string;
+  totalLectures: number;
+  totalCompleteLectures: number;
+  totalQuizzes: number;
+  totalCompleteQuizzes: number;
+}

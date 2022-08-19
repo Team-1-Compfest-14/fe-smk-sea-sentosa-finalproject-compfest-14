@@ -37,7 +37,9 @@ const Login = () => {
       const { role }: any = decoded;
       localStorage.setItem("accessToken", accessToken);
       setUser({ accessToken: accessToken });
-      if (role === 2) {
+      if (role === 0) {
+        navigate("/student/dashboard");
+      } else if (role === 2) {
         navigate("/admin/instructors");
       } else {
         navigate("/dashboard");
