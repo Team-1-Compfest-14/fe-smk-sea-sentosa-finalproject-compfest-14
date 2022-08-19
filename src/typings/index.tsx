@@ -59,3 +59,18 @@ export interface answersInterface {
   questionId: number;
   questionOptionId: number;
 }
+
+export interface enrolledCourses {
+  name: string;
+  teacher: string;
+  totalModule: number;
+  totalModuleCompletion: number;
+  isComplete: boolean;
+  courseId: number;
+}
+
+export interface studentDashboardHeader {
+  name: string;
+  totalActive: number;
+  totalComplete: number;
+}

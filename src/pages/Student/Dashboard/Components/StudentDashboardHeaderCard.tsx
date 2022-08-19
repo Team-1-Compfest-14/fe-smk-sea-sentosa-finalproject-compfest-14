@@ -1,10 +1,11 @@
+import { studentDashboardHeader } from "../../../../typings";
 import { CellArt } from "../../../../assets";
 
-interface StudentDashboardHeaderCardProps {
-  name: string;
-}
-
-const StudentDashboardHeaderCard = ({ name }: StudentDashboardHeaderCardProps) => {
+const StudentDashboardHeaderCard = ({
+  name,
+  totalActive,
+  totalComplete
+}: studentDashboardHeader) => {
   return (
     <div className="bg-orange-light border border-black rounded-3xl h-64 flex justify-between items-center overflow-clip">
       <div>
@@ -12,13 +13,13 @@ const StudentDashboardHeaderCard = ({ name }: StudentDashboardHeaderCardProps) =
         <div className="flex justify-center">
           <div className="flex flex-col items-start justify-center mx-6 mt-5">
             <div className="bg-yellow rounded-full p-4 border-2 border-black">
-              <p className="text-2xl mx-2">5</p>
+              <p className="text-2xl mx-2">{totalActive}</p>
             </div>
             <p className="mt-2 text-lg font-semibold mx-2">Active</p>
           </div>
           <div className="flex flex-col items-center justify-center mx-6 mt-5">
             <div className="bg-orange-dark rounded-full p-4 border-2 border-black">
-              <p className="text-2xl mx-2">2</p>
+              <p className="text-2xl mx-2">{totalComplete}</p>
             </div>
             <p className="mt-2 text-lg font-semibold mx-2">Completed</p>
           </div>

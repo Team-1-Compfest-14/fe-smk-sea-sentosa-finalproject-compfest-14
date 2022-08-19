@@ -1,39 +1,95 @@
-import { useState } from "react";
+/* eslint-disable no-unused-vars */
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useDocumentTitle } from "../../../hooks";
+import { enrolledCourses, studentDashboardHeader } from "../../../typings";
 import { StudentDashboardHeaderCard, CourseCardWithProgressBar } from "./Components";
 
 const StudentDashboard = () => {
   useDocumentTitle("Dashboard | Pelajarin");
-  const [showCompleteCourses, setShowCompleteCourses] = useState(false);
 
-  const enrolledCourses = [
-    {
-      name: "Introduction to Computer Science",
-      instructorName: "John Doe",
-      completeSection: 5,
-      totalSection: 10,
-      isComplete: false
-    },
-    {
-      name: "Introduction to Backend",
-      instructorName: "John Doe",
-      completeSection: 6,
-      totalSection: 10,
-      isComplete: false
-    },
-    {
-      name: "Introduction to REST API",
-      instructorName: "John Doe",
-      completeSection: 6,
-      totalSection: 6,
-      isComplete: true
-    }
-  ];
+  const [enrolledCourses, setEnrolledCourses] = useState<enrolledCourses[] | []>([]);
+  const [showCompleteCourses, setShowCompleteCourses] = useState(false);
+  const [headerData, setHeaderData] = useState<studentDashboardHeader>();
+
+  const accessToken = localStorage.getItem("accessToken");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios
+        .get("http://localhost:5000/courses/dashboard/progress", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
+        .then((res) => {
+          const { dashboardDatas } = res.data.data;
+          setEnrolledCourses(dashboardDatas);
+          let totalActive = 0;
+          let totalComplete = 0;
+          dashboardDatas.map((course: enrolledCourses) => {
+            if (course.isComplete) {
+              totalComplete++;
+            } else {
+              totalActive++;
+            }
+          });
+          setHeaderData({
+            name: "John Doe",
+            totalActive,
+            totalComplete
+          });
+        })
+        .catch((err) => {
+          if (err.response.data.message === "JWT expired") {
+            axios
+              .post("http://localhost:5000/auth/refresh", {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`
+                }
+              })
+              .then((res) => {
+                localStorage.setItem("accessToken", res.data.data.accessToken);
+                fetchData();
+              });
+          } else {
+            console.log(err);
+            alert("Error");
+          }
+        });
+    };
+
+    fetchData();
+  }, []);
+
+  // const enrolledCourses = [
+  //   {
+  //     name: "Introduction to Computer Science",
+  //     instructorName: "John Doe",
+  //     completeSection: 5,
+  //     totalSection: 10,
+  //     isComplete: false
+  //   },
+  //   {
+  //     name: "Introduction to Backend",
+  //     instructorName: "John Doe",
+  //     completeSection: 6,
+  //     totalSection: 10,
+  //     isComplete: false
+  //   },
+  //   {
+  //     name: "Introduction to REST API",
+  //     instructorName: "John Doe",
+  //     completeSection: 6,
+  //     totalSection: 6,
+  //     isComplete: true
+  //   }
+  // ];
 
   return (
     <div className="p-10 flex flex-col items-center justify-center">
       <div className="w-2/3">
-        <StudentDashboardHeaderCard name="Rafi Priatna K" />
+        <StudentDashboardHeaderCard {...headerData!} />
         <div className="flex w-full items-center justify-evenly my-8">
           <button
             onClick={() => {
@@ -56,17 +112,18 @@ const StudentDashboard = () => {
             Completed
           </button>
         </div>
-        {showCompleteCourses
+        {showCompleteCourses && enrolledCourses
           ? enrolledCourses
               .filter((item) => item.isComplete === true)
               .map((item, index) => (
                 <CourseCardWithProgressBar
                   key={index}
-                  courseName={item.name}
-                  instructorName={item.instructorName}
-                  completeSections={item.completeSection}
-                  totalSections={item.totalSection}
+                  name={item.name}
+                  teacher={item.teacher}
+                  totalModuleCompletion={item.totalModuleCompletion}
+                  totalModule={item.totalModule}
                   isComplete={item.isComplete}
+                  courseId={item.courseId}
                 />
               ))
           : enrolledCourses
@@ -74,11 +131,12 @@ const StudentDashboard = () => {
               .map((item, index) => (
                 <CourseCardWithProgressBar
                   key={index}
-                  courseName={item.name}
-                  instructorName={item.instructorName}
-                  completeSections={item.completeSection}
-                  totalSections={item.totalSection}
+                  name={item.name}
+                  teacher={item.teacher}
+                  totalModuleCompletion={item.totalModuleCompletion}
+                  totalModule={item.totalModule}
                   isComplete={item.isComplete}
+                  courseId={item.courseId}
                 />
               ))}
       </div>

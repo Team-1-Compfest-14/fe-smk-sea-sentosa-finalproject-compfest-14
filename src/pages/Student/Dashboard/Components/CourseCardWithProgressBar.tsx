@@ -1,23 +1,17 @@
 import { GiTeacher } from "react-icons/gi";
 import { GrPlay } from "react-icons/gr";
-
-interface CourseCardWithProgressBarProps {
-  courseName: string;
-  instructorName: string;
-  completeSections: number;
-  totalSections: number;
-  isComplete: boolean;
-}
+import { enrolledCourses } from "../../../../typings";
 
 const CourseCardWithProgressBar = ({
-  courseName,
-  instructorName,
-  completeSections,
-  totalSections,
-  isComplete
-}: CourseCardWithProgressBarProps) => {
+  name,
+  teacher,
+  totalModule,
+  totalModuleCompletion,
+  isComplete,
+  courseId
+}: enrolledCourses) => {
   function countProgressBar() {
-    return (completeSections / totalSections) * 100;
+    return (totalModuleCompletion / totalModule) * 100;
   }
 
   const progressStyle = {
@@ -29,15 +23,15 @@ const CourseCardWithProgressBar = ({
       {/* Details */}
       <div className="my-auto flex justify-between items-center">
         <div>
-          <p className="text-2xl font-bold mb-4">{courseName}</p>
+          <p className="text-2xl font-bold mb-4">{name}</p>
           <p className="flex items-center mb-2">
             <GiTeacher className="mr-2" size={20} />
-            {instructorName}
+            {teacher}
           </p>
           <div>
             {!isComplete && (
               <p className="mt-5 text-sm font-semibold">
-                {completeSections} out of {totalSections} sections completed.
+                {totalModule} out of {totalModuleCompletion} sections completed.
               </p>
             )}
             <div className="w-full bg-orange-light rounded-full border border-black">
@@ -55,7 +49,7 @@ const CourseCardWithProgressBar = ({
       {!isComplete && (
         <div
           className="flex flex-col items-center justify-center cursor-pointer p-4 hover:bg-slate-200 hover:rounded-xl"
-          onClick={() => {}}
+          onClick={() => alert(courseId)}
         >
           <GrPlay size={28} />
           <p className="font-bold text-xs mx-2 mt-1">Continue</p>
