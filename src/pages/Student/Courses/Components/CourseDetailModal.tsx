@@ -1,15 +1,18 @@
+/* eslint-disable no-unused-vars */
 interface CourseDetailModalProp {
   handleBack: () => void;
   courseName: string;
   instructorName: string;
   description: string;
+  handeModalEnroll: (type: string) => void;
 }
 
 const CourseDetailModal = ({
   handleBack,
   courseName,
   instructorName,
-  description
+  description,
+  handeModalEnroll
 }: CourseDetailModalProp) => (
   <div className="backdrop-brightness-50 backdrop-blur-sm w-screen h-screen fixed flex justify-center items-center top-0 left-0">
     <div className="fixed bg-white rounded-2xl border border-black w-2/5">
@@ -22,7 +25,10 @@ const CourseDetailModal = ({
         <p>{description}</p>
         <div className="flex justify-end">
           <div className="flex flex-col items-center justify-center p-4">
-            <button className="my-1 px-5 py-2 border border-black rounded-lg bg-orange-light hover:bg-orange-dark">
+            <button
+              onClick={() => handeModalEnroll("confirm")}
+              className="my-1 px-5 py-2 border border-black rounded-lg bg-orange-light hover:bg-orange-dark"
+            >
               Enroll
             </button>
             <button

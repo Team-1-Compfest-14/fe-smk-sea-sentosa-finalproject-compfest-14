@@ -1,20 +1,76 @@
+import { useEffect, useState } from "react";
 import { VerifiedCourseCard, StudentCourseCard } from "./Components";
 import { useDocumentTitle } from "../../../hooks";
+import axiosJWT from "../axiosJWT";
+import { Link } from "react-router-dom";
+
+interface courses {
+  courseId: number;
+  courseName: string;
+  instructorName: string;
+  description: string;
+  numOfSections: number;
+}
 
 const StudentCourses = () => {
   useDocumentTitle("All Verified Courses | Pelajarin");
 
+  const [courses, setCourses] = useState<courses[] | []>([]);
+  const accessToken = localStorage.getItem("accessToken");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await axiosJWT
+        .get("http://localhost:5000/courses/verified/", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
+        .then((res) => {
+          const { courses } = res.data.data;
+          const tempCourse: courses[] = [];
+          courses.map((course: any) => {
+            tempCourse.push({
+              courseId: course.id,
+              courseName: course.name,
+              instructorName: "Testing",
+              description: course.description,
+              numOfSections: 5
+            });
+          });
+          setCourses(tempCourse);
+        })
+        .catch(async (err) => {
+          console.log(err);
+          alert("Error");
+        });
+    };
+
+    fetchData();
+  }, []);
+
+  const handleEnroll = async (courseId: number) => {
+    console.log(courseId);
+  };
+
   return (
-    <div className="p-10 flex flex-col items-center justify-center">
-      <div className="w-2/3">
-        <VerifiedCourseCard />
-        <StudentCourseCard
-          courseName="Itadakimas"
-          instructorName="Rafi Priatna K"
-          numOfSections={5}
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-        />
-      </div>
+    <div className="container mx-auto p-10 max-w-screen-lg">
+      <VerifiedCourseCard />
+      {courses.length > 0 ? (
+        courses.map((course: courses, index) => {
+          return <StudentCourseCard key={index} {...course} handleEnroll={handleEnroll} />;
+        })
+      ) : (
+        <div className="text-center text-2xl flex flex-col items-center">
+          You have enrolled all verified courses.
+          <Link
+            to="/student/dashboard"
+            className="w-1/3 bg-blue text-white px-4 py-2 rounded-xl border border-black hover:bg-blue-dark my-5"
+          >
+            Go to Dashboard
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

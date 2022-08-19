@@ -1,22 +1,36 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { GiTeacher } from "react-icons/gi";
 import { TbNotes } from "react-icons/tb";
 import CourseDetailModal from "./CourseDetailModal";
 
 interface StudentCourseCardProps {
+  courseId: number;
   courseName: string;
   instructorName: string;
   numOfSections: number;
   description: string;
+  handleEnroll: (type: number) => void;
 }
 
 const StudentCourseCard = ({
+  courseId,
   courseName,
   instructorName,
   numOfSections,
-  description
+  description,
+  handleEnroll
 }: StudentCourseCardProps) => {
   const [showCourseDetailModal, setShowCourseDetailModal] = useState(false);
+
+  const handeModalEnroll = (type: string) => {
+    if (type === "confirm") {
+      setShowCourseDetailModal(false);
+      handleEnroll(courseId);
+    } else {
+      setShowCourseDetailModal(false);
+    }
+  };
 
   return (
     <div className="h-40 border w-full border-black rounded-2xl flex justify-between items-center my-4 px-10">
@@ -59,6 +73,7 @@ const StudentCourseCard = ({
           courseName={courseName}
           instructorName={instructorName}
           description={description}
+          handeModalEnroll={handeModalEnroll}
         />
       )}
     </div>

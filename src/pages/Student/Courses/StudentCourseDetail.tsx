@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { CourseDetailCard, SimpleCourseCard } from "./Components";
 import { useDocumentTitle } from "../../../hooks";
 
@@ -39,6 +40,11 @@ const StudentCourseDetail = () => {
       isComplete: true
     }
   ];
+
+  useEffect(() => {
+    const { courseId } = useParams();
+    console.log(courseId);
+  }, []);
 
   return (
     <div className="p-10 flex flex-col items-center justify-center">
