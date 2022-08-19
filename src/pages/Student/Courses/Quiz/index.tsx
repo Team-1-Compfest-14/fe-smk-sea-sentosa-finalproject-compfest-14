@@ -111,7 +111,7 @@ const StudentQuiz = () => {
         </div>
 
         {/* Questions */}
-        {questionsData.length > 0 &&
+        {questionsData.length > 0 ? (
           questionsData.map((question, index) => (
             <QuestionCard
               key={index}
@@ -119,16 +119,23 @@ const StudentQuiz = () => {
               index={index}
               handleAnswer={handleAnswer}
             />
-          ))}
+          ))
+        ) : (
+          <p className="text-center text-2xl my-5">
+            Question has not been added. Please come back later.
+          </p>
+        )}
         <div className="flex justify-end mt-8">
-          <button
-            className="bg-blue text-white px-4 py-2 rounded-xl border border-black hover:bg-blue-dark"
-            onClick={() => {
-              handleSubmitAnswer();
-            }}
-          >
-            Submit
-          </button>
+          {questionsData.length > 0 && (
+            <button
+              className="bg-blue text-white px-4 py-2 rounded-xl border border-black hover:bg-blue-dark"
+              onClick={() => {
+                handleSubmitAnswer();
+              }}
+            >
+              Submit
+            </button>
+          )}
         </div>
       </div>
       {showConfirmExitModal && <ConfirmExitModal handleConfirmExit={handleConfirmExit} />}
