@@ -1,8 +1,22 @@
-import { useState } from "react";
+import axios from "axios";
+import { useContext, useState } from "react";
 import { FaChalkboardTeacher } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { LoginContext } from "../../context";
 
 const Dropdown = () => {
   const [showDropDown, setShowDropDown] = useState(false);
+  const { setUser } = useContext(LoginContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    axios
+      .delete("http://localhost:5000/auth/logout")
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+    localStorage.removeItem("accessToken");
+    setUser({ accessToken: null });
+  };
 
   return (
     <div className="relative" onClick={() => setShowDropDown(!showDropDown)}>
@@ -18,7 +32,13 @@ const Dropdown = () => {
           showDropDown ? "" : "hidden"
         }`}
       >
-        <button className="p-2 hover:bg-slate-200 hover:rounded-lg" onClick={() => {}}>
+        <button
+          className="p-2 hover:bg-slate-200 hover:rounded-lg"
+          onClick={() => {
+            handleLogout();
+            navigate("/");
+          }}
+        >
           Log Out
         </button>
       </div>

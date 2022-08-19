@@ -10,10 +10,24 @@ import {
   QuizCard,
   AddQuizModal
 } from "./components";
-import { Lecture, Quiz } from "../../../typings";
+import { Course, Lecture, Quiz } from "../../../typings";
+import { useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const InstructorCourse = () => {
-  useDocumentTitle("Edit Calculus 1 | Pelajarin");
+  const [course, setCourse] = useState<Course | null>(null);
+  const { id } = useParams();
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/courses/instructor/own/${id}`)
+      .then((res) => {
+        const { course } = res.data.data;
+        setCourse(course);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  useDocumentTitle(`Edit ${course?.name} | Pelajarin`);
 
   // General states and functions
   const [showLectures, setShowLectures] = useState(true);
@@ -112,11 +126,11 @@ const InstructorCourse = () => {
           index: 0,
           description: "Test question",
           options: [
-            { id: 0, value: "Option A", correctAnswer: true },
-            { id: 1, value: "Option B", correctAnswer: false },
-            { id: 2, value: "Option C", correctAnswer: false },
-            { id: 3, value: "Option D", correctAnswer: false },
-            { id: 4, value: "Option E", correctAnswer: false }
+            { id: 0, value: "Option A", correctAnswer: true, mandatory: true },
+            { id: 1, value: "Option B", correctAnswer: false, mandatory: true },
+            { id: 2, value: "Option C", correctAnswer: false, mandatory: true },
+            { id: 3, value: "Option D", correctAnswer: false, mandatory: true },
+            { id: 4, value: "Option E", correctAnswer: false, mandatory: true }
           ]
         },
         {
@@ -124,11 +138,11 @@ const InstructorCourse = () => {
           index: 1,
           description: "Test question2",
           options: [
-            { id: 0, value: "Option A", correctAnswer: true },
-            { id: 1, value: "Option B", correctAnswer: false },
-            { id: 2, value: "Option C", correctAnswer: false },
-            { id: 3, value: "Option D", correctAnswer: false },
-            { id: 4, value: "Option E", correctAnswer: false }
+            { id: 0, value: "Option A", correctAnswer: true, mandatory: true },
+            { id: 1, value: "Option B", correctAnswer: false, mandatory: true },
+            { id: 2, value: "Option C", correctAnswer: false, mandatory: true },
+            { id: 3, value: "Option D", correctAnswer: false, mandatory: true },
+            { id: 4, value: "Option E", correctAnswer: false, mandatory: true }
           ]
         },
         {
@@ -136,11 +150,11 @@ const InstructorCourse = () => {
           index: 2,
           description: "Test question3",
           options: [
-            { id: 0, value: "Option A", correctAnswer: true },
-            { id: 1, value: "Option B", correctAnswer: false },
-            { id: 2, value: "Option C", correctAnswer: false },
-            { id: 3, value: "Option D", correctAnswer: false },
-            { id: 4, value: "Option E", correctAnswer: false }
+            { id: 0, value: "Option A", correctAnswer: true, mandatory: true },
+            { id: 1, value: "Option B", correctAnswer: false, mandatory: true },
+            { id: 2, value: "Option C", correctAnswer: false, mandatory: true },
+            { id: 3, value: "Option D", correctAnswer: false, mandatory: true },
+            { id: 4, value: "Option E", correctAnswer: false, mandatory: true }
           ]
         }
       ],
@@ -155,11 +169,11 @@ const InstructorCourse = () => {
           index: 0,
           description: "Test question",
           options: [
-            { id: 0, value: "Option A", correctAnswer: true },
-            { id: 1, value: "Option B", correctAnswer: false },
-            { id: 2, value: "Option C", correctAnswer: false },
-            { id: 3, value: "Option D", correctAnswer: false },
-            { id: 4, value: "Option E", correctAnswer: false }
+            { id: 0, value: "Option A", correctAnswer: true, mandatory: true },
+            { id: 1, value: "Option B", correctAnswer: false, mandatory: true },
+            { id: 2, value: "Option C", correctAnswer: false, mandatory: true },
+            { id: 3, value: "Option D", correctAnswer: false, mandatory: true },
+            { id: 4, value: "Option E", correctAnswer: false, mandatory: true }
           ]
         },
         {
@@ -167,11 +181,11 @@ const InstructorCourse = () => {
           index: 1,
           description: "Test question2",
           options: [
-            { id: 0, value: "Option A", correctAnswer: true },
-            { id: 1, value: "Option B", correctAnswer: false },
-            { id: 2, value: "Option C", correctAnswer: false },
-            { id: 3, value: "Option D", correctAnswer: false },
-            { id: 4, value: "Option E", correctAnswer: false }
+            { id: 0, value: "Option A", correctAnswer: true, mandatory: true },
+            { id: 1, value: "Option B", correctAnswer: false, mandatory: true },
+            { id: 2, value: "Option C", correctAnswer: false, mandatory: true },
+            { id: 3, value: "Option D", correctAnswer: false, mandatory: true },
+            { id: 4, value: "Option E", correctAnswer: false, mandatory: true }
           ]
         },
         {
@@ -179,11 +193,11 @@ const InstructorCourse = () => {
           index: 2,
           description: "Test question3",
           options: [
-            { id: 0, value: "Option A", correctAnswer: true },
-            { id: 1, value: "Option B", correctAnswer: false },
-            { id: 2, value: "Option C", correctAnswer: false },
-            { id: 3, value: "Option D", correctAnswer: false },
-            { id: 4, value: "Option E", correctAnswer: false }
+            { id: 0, value: "Option A", correctAnswer: true, mandatory: true },
+            { id: 1, value: "Option B", correctAnswer: false, mandatory: true },
+            { id: 2, value: "Option C", correctAnswer: false, mandatory: true },
+            { id: 3, value: "Option D", correctAnswer: false, mandatory: true },
+            { id: 4, value: "Option E", correctAnswer: false, mandatory: true }
           ]
         }
       ],
@@ -206,11 +220,8 @@ const InstructorCourse = () => {
     <div className="container mx-auto p-10 max-w-screen-lg">
       {/* Header Card*/}
       <CourseDetailHeaderCard
-        title="Calculus 1"
-        description="In this course, students will be introduced to limits and how they are the basis of the topics of
-derivatives and their applications, and also integration and application of integrals. This course
-is a prerequisite for Calculus 2 and an understanding of this course will be crucial to understand
-Calculus 2."
+        name={course?.name ?? "Course"}
+        description={course?.description ?? "Description"}
         lectures={lectures}
         quizzes={quizzes}
       />

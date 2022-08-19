@@ -5,6 +5,8 @@ import { validationSchema } from "./validations/Validations";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import { useContext } from "react";
+import { LoginContext } from "../../context";
 
 interface FormValues {
   email: string;
@@ -12,6 +14,7 @@ interface FormValues {
 }
 
 const Login = () => {
+  const { setUser } = useContext(LoginContext);
   useDocumentTitle("Login | Pelajarin");
   const {
     register,
@@ -23,7 +26,7 @@ const Login = () => {
 
   const onSubmit = handleSubmit(async (data) => {
     const { email, password } = data;
-    const response = await axios.post("http://localhost:8080/auth/login", {
+    const response = await axios.post("http://localhost:5000/auth/login", {
       email: email,
       password: password
     });
@@ -32,8 +35,12 @@ const Login = () => {
     const decoded = jwt_decode(accessToken);
     if (status === "success") {
       const { role }: any = decoded;
+      localStorage.setItem("accessToken", accessToken);
+      setUser({ accessToken: accessToken });
       if (role === 2) {
         navigate("/admin/instructors");
+      } else {
+        navigate("/dashboard");
       }
     } else {
       console.log("error");

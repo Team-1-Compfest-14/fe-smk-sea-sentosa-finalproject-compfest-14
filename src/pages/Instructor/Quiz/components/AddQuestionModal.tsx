@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { IoChevronBack } from "react-icons/io5";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { questionValidationSchema } from "../../Course/validations/Validations";
@@ -23,14 +23,41 @@ const AddQuestionModal = ({ handleBack, questions, setQuestions }: AddQuestionMo
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    control
   } = useForm<FormValues>({ resolver: yupResolver(questionValidationSchema) });
 
-  const [options, setOptions] = useState<Option[]>([]);
+  const { append, remove } = useFieldArray({ name: "options", control });
+
+  const [options, setOptions] = useState<Option[]>([
+    {
+      id: 0,
+      value: "",
+      correctAnswer: false,
+      mandatory: true
+    },
+    {
+      id: 1,
+      value: "",
+      correctAnswer: false,
+      mandatory: true
+    }
+  ]);
+
+  const [invalidOptions, setInvalidOptions] = useState(false);
+
+  const numOfCorrectAnswers = (options: Option[]) => {
+    const optionsCopy = Array.from(options);
+    return optionsCopy.filter((option) => option.correctAnswer === true).length;
+  };
 
   const onSubmit = handleSubmit((data) => {
+    if (numOfCorrectAnswers(data.options) !== 1) {
+      setInvalidOptions(true);
+      return;
+    }
     const items = Array.from(questions);
-    items.push({ ...data, index: questions.length, id: 1010 });
+    items.push({ ...data, index: questions.length, id: questions.length + 1 });
     setQuestions(items);
     handleBack();
   });
@@ -64,54 +91,39 @@ const AddQuestionModal = ({ handleBack, questions, setQuestions }: AddQuestionMo
           {/* Options */}
           <div className="flex flex-col gap-3">
             <div>
-              <label>Options</label>
               <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-3">
-                  <input
-                    type="radio"
-                    className="checked:bg-green"
-                    name={`question${questions.length}Options`}
-                  />
-                  <textarea
-                    placeholder="500 cm"
-                    className="border border-black px-3 py-2 rounded-lg w-full"
-                    {...register("options")}
-                  />
-                </div>
-                <div className="flex items-center gap-3">
-                  <input
-                    onClick={() => {}}
-                    type="radio"
-                    className="checked:bg-green"
-                    name={`question${questions.length}Options`}
-                  />
-                  <textarea
-                    placeholder="500 cm"
-                    className="border border-black px-3 py-2 rounded-lg w-full"
-                    {...register("options")}
-                  />
-                </div>
                 {options.map((option, index) => (
-                  <div key={index} className="flex items-center gap-3">
+                  <div key={index} className="flex items-center justify-between gap-5">
                     <input
-                      type="radio"
-                      className="checked:bg-green"
-                      name={`question${questions.length}Options`}
+                      type="checkbox"
+                      value="true"
+                      className="rounded-full checked:bg-green"
+                      {...register(`options.${index}.correctAnswer`)}
                     />
-                    <textarea
-                      placeholder="500 cm"
-                      className="border border-black px-3 py-2 rounded-lg w-full"
-                      {...register("options")}
-                    />
-                    <MdDeleteForever
-                      onClick={() => {
-                        const optionsCopy = Array.from(options);
-                        optionsCopy.splice(index, 1);
-                        setOptions(optionsCopy);
-                      }}
-                      className="text-red-600 cursor-pointer hover:text-red-700"
-                      size={40}
-                    />
+                    <div>
+                      <label>Option {index + 1}</label>
+                      <div className="flex items-center justify-end">
+                        <textarea
+                          placeholder="500 cm"
+                          className="border border-black px-3 py-2 rounded-lg w-full"
+                          {...register(`options.${index}.value`)}
+                        />
+                        {!option.mandatory && (
+                          <MdDeleteForever
+                            onClick={() => {
+                              const optionsCopy = Array.from(options);
+                              optionsCopy.splice(index, 1);
+                              remove(index);
+                              setOptions(optionsCopy);
+                            }}
+                            className="text-red-600 cursor-pointer hover:text-red-700"
+                            size={40}
+                          />
+                        )}
+                      </div>
+                      <p>{errors?.options?.[index]?.value?.message}</p>
+                      <p>{errors?.options?.[index]?.correctAnswer?.message}</p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -121,13 +133,20 @@ const AddQuestionModal = ({ handleBack, questions, setQuestions }: AddQuestionMo
             <p
               onClick={() => {
                 const optionsCopy = Array.from(options);
-                optionsCopy.push({ id: options.length, value: "", correctAnswer: false });
+                optionsCopy.push({
+                  id: options.length,
+                  value: "",
+                  correctAnswer: false,
+                  mandatory: false
+                });
+                append({ id: options.length, value: "", correctAnswer: false, mandatory: false });
                 setOptions(optionsCopy);
               }}
               className="flex items-center justify-center py-1 border border-black rounded-xl hover:bg-slate-200 cursor-pointer"
             >
               Add Option
             </p>
+            {invalidOptions && <p>Question must only have 1 correct answer</p>}
           </div>
         </div>
         {/* Buttons */}

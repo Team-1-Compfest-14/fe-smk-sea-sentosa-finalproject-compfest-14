@@ -1,11 +1,14 @@
+export type User = {
+  accessToken: string | null;
+};
+
 export type Course = {
   id: number;
-  index: number;
-  title: string;
+  instructorId: number;
+  name: string;
   description: string;
-  numOfStudents: number;
-  numOfSections: number;
-  verified: boolean;
+  isVerified: boolean;
+  total: number;
 };
 
 export type Lecture = {
@@ -19,6 +22,7 @@ export type Option = {
   id: number;
   value: string;
   correctAnswer: boolean;
+  mandatory: boolean;
 };
 
 export type Question = {

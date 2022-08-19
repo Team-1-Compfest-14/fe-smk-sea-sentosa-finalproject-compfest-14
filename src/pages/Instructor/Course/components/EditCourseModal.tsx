@@ -4,7 +4,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { courseValidationSchema } from "../validations/Validations";
 import { Modal } from "../../../../components";
 import { Course } from "../../../../typings";
-import { useState } from "react";
 
 interface EditCourseModalProp {
   handleBack: () => void;
@@ -12,53 +11,11 @@ interface EditCourseModalProp {
 }
 
 interface FormValues {
-  title: string;
+  name: string;
   description: string;
 }
 
 const EditCourseModal = ({ handleBack, selectedCourse }: EditCourseModalProp) => {
-  const [courses, setCourses] = useState([
-    {
-      id: 0,
-      index: 0,
-      title: "Calculus 1",
-      description:
-        "In this course, students will be introduced to limits and how they are the basis of the topics of derivatives and their applications, and also integration and application of integrals. This course is a prerequisite for Calculus 2 and an understanding of this course will be crucial to understand Calculus 2.",
-      numOfStudents: 10,
-      numOfSections: 10,
-      verified: true
-    },
-    {
-      id: 1,
-      index: 1,
-      title: "Calculus 2",
-      description:
-        "In this course, students will be introduced to limits and how they are the basis of the topics of derivatives and their applications, and also integration and application of integrals. This course is a prerequisite for Calculus 2 and an understanding of this course will be crucial to understand Calculus 2.",
-      numOfStudents: 10,
-      numOfSections: 10,
-      verified: false
-    },
-    {
-      id: 2,
-      index: 3,
-      title: "Calculus 3",
-      description:
-        "In this course, students will be introduced to limits and how they are the basis of the topics of derivatives and their applications, and also integration and application of integrals. This course is a prerequisite for Calculus 2 and an understanding of this course will be crucial to understand Calculus 2.",
-      numOfStudents: 10,
-      numOfSections: 10,
-      verified: false
-    },
-    {
-      id: 3,
-      index: 3,
-      title: "Calculus 14",
-      description:
-        "In this course, students will be introduced to limits and how they are the basis of the topics of derivatives and their applications, and also integration and application of integrals. This course is a prerequisite for Calculus 2 and an understanding of this course will be crucial to understand Calculus 2.",
-      numOfStudents: 10,
-      numOfSections: 10,
-      verified: true
-    }
-  ]);
   const {
     register,
     handleSubmit,
@@ -66,13 +23,14 @@ const EditCourseModal = ({ handleBack, selectedCourse }: EditCourseModalProp) =>
   } = useForm<FormValues>({ resolver: yupResolver(courseValidationSchema) });
 
   const onSubmit = handleSubmit((data) => {
-    const items = Array.from(courses);
-    items.splice(selectedCourse.index, 1, {
-      ...data,
-      ...selectedCourse
-    });
-    setCourses(items);
-    handleBack();
+    console.log(data);
+    // const items = Array.from(courses);
+    // items.splice(selectedCourse.index, 1, {
+    //   ...data,
+    //   ...selectedCourse
+    // });
+    // setCourses(items);
+    // handleBack();
   });
 
   return (
@@ -83,7 +41,7 @@ const EditCourseModal = ({ handleBack, selectedCourse }: EditCourseModalProp) =>
           size={28}
           className="bg-orange-light rounded-lg border border-black cursor-pointer"
         />
-        Editing {selectedCourse.title}
+        Editing {selectedCourse.name}
       </p>
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
         <div>
@@ -91,11 +49,11 @@ const EditCourseModal = ({ handleBack, selectedCourse }: EditCourseModalProp) =>
           <input
             type="text"
             placeholder="Introduction to Programming"
-            defaultValue={selectedCourse.title}
+            defaultValue={selectedCourse.name}
             className="border border-black px-3 py-2 rounded-lg w-full"
-            {...register("title")}
+            {...register("name")}
           />
-          <p>{errors?.title?.message}</p>
+          <p>{errors?.name?.message}</p>
         </div>
         <div>
           <label>Description</label>
