@@ -29,7 +29,18 @@ const AddQuestionModal = ({ handleBack }: AddQuestionModalProp) => {
   } = useForm<FormValues>({ resolver: yupResolver(questionValidationSchema) });
 
   const { append, remove } = useFieldArray({ name: "options", control });
-  const [options, setOptions] = useState<Option[]>([]);
+  const [options, setOptions] = useState<Option[]>([
+    {
+      option: "",
+      isCorrectAnswer: false,
+      mandatory: true
+    },
+    {
+      option: "",
+      isCorrectAnswer: false,
+      mandatory: true
+    }
+  ]);
   const [invalidOptions, setInvalidOptions] = useState(false);
   const { courseId, quizId } = useParams();
 
@@ -104,16 +115,18 @@ const AddQuestionModal = ({ handleBack }: AddQuestionModalProp) => {
                           className="border border-black px-3 py-2 rounded-lg w-full"
                           {...register(`options.${index}.option`)}
                         />
-                        <MdDeleteForever
-                          onClick={() => {
-                            const optionsCopy = Array.from(options);
-                            optionsCopy.splice(index, 1);
-                            remove(index);
-                            setOptions(optionsCopy);
-                          }}
-                          className="text-red-600 cursor-pointer hover:text-red-700"
-                          size={40}
-                        />
+                        {!option?.mandatory && (
+                          <MdDeleteForever
+                            onClick={() => {
+                              const optionsCopy = Array.from(options);
+                              optionsCopy.splice(index, 1);
+                              remove(index);
+                              setOptions(optionsCopy);
+                            }}
+                            className="text-red-600 cursor-pointer hover:text-red-700"
+                            size={40}
+                          />
+                        )}
                       </div>
                       <p>{errors?.options?.[index]?.option?.message}</p>
                       <p>{errors?.options?.[index]?.isCorrectAnswer?.message}</p>
@@ -138,7 +151,7 @@ const AddQuestionModal = ({ handleBack }: AddQuestionModalProp) => {
             >
               Add Option
             </p>
-            {invalidOptions && <p>Question must only have 1 correct answer</p>}
+            {invalidOptions && <p>Question must have 1 and only 1 correct answer</p>}
           </div>
         </div>
         {/* Buttons */}

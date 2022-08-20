@@ -54,10 +54,13 @@ const Router = () => {
                 path="/instructor/dashboard"
                 element={user?.accessToken !== null ? <InstructorDashboard /> : <Login />}
               />
-              <Route path="/instructor/courses/:id" element={<InstructorCourse />} />
+              <Route
+                path="/instructor/courses/:id"
+                element={user?.accessToken !== null ? <InstructorCourse /> : <Login />}
+              />
               <Route
                 path="/instructor/courses/:courseId/quizzes/:quizId"
-                element={<InstructorQuiz />}
+                element={user?.accessToken !== null ? <InstructorQuiz /> : <Login />}
               />
               {/* Student */}
               <Route

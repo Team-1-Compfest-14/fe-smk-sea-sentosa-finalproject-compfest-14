@@ -42,7 +42,10 @@ const QuizCard = ({ provided, index, quiz }: QuizCardProp) => {
         <MdDragIndicator size={32} />
         <div>
           <p className="text-xl font-bold">{quizData?.quizName}</p>
-          <p>{quizData?.questions.length} questions</p>
+          <p>
+            {quizData?.questions.length ?? "No"}
+            {quizData?.questions.length! !== 1 ? " questions" : " question"}
+          </p>
         </div>
       </div>
       {/* Buttons */}

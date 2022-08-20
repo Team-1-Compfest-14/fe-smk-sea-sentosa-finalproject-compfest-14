@@ -1,56 +1,67 @@
 import { useEffect, useState } from "react";
 import { useDocumentTitle } from "../../../hooks";
-import { enrolledCourses, studentDashboardHeader } from "../../../typings";
+import { enrolledCourses, UserDetails } from "../../../typings";
 import { StudentDashboardHeaderCard, CourseCardWithProgressBar } from "./Components";
-import axiosJWT from "../axiosJWT";
+import { BASE_URL, refreshAuthLogic } from "../../../api";
+import axios from "axios";
+import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 const StudentDashboard = () => {
   useDocumentTitle("Dashboard | Pelajarin");
 
   const [enrolledCourses, setEnrolledCourses] = useState<enrolledCourses[] | []>([]);
   const [showCompleteCourses, setShowCompleteCourses] = useState(false);
-  const [headerData, setHeaderData] = useState<studentDashboardHeader>();
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+  const [totalActive, setTotalActive] = useState<number>(0);
+  const [totalComplete, setTotalComplete] = useState<number>(0);
 
-  const accessToken = localStorage.getItem("accessToken");
+  const fetchData = () => {
+    axios
+      .get(`${BASE_URL}/courses/dashboard/progress`)
+      .then((res) => {
+        const { dashboardDatas } = res.data.data;
+        setEnrolledCourses(dashboardDatas);
+        let totalActive = 0;
+        let totalComplete = 0;
+        dashboardDatas.map((course: enrolledCourses) => {
+          if (course.isComplete) {
+            totalComplete++;
+          } else {
+            totalActive++;
+          }
+        });
+        setTotalActive(totalActive);
+        setTotalComplete(totalComplete);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
+  const fetchUser = () => {
+    axios
+      .get(`${BASE_URL}/users/profile`)
+      .then((res) => {
+        const { user } = res.data.data;
+        setUserDetails(user);
+      })
+      .catch((err) => console.log(err));
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      await axiosJWT
-        .get("http://localhost:5000/courses/dashboard/progress", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        })
-        .then((res) => {
-          const { dashboardDatas } = res.data.data;
-          setEnrolledCourses(dashboardDatas);
-          let totalActive = 0;
-          let totalComplete = 0;
-          dashboardDatas.map((course: enrolledCourses) => {
-            if (course.isComplete) {
-              totalComplete++;
-            } else {
-              totalActive++;
-            }
-          });
-          setHeaderData({
-            name: "John Doe",
-            totalActive,
-            totalComplete
-          });
-        })
-        .catch(async (err) => {
-          console.log(err);
-          alert("Error");
-        });
-    };
+    createAuthRefreshInterceptor(axios, refreshAuthLogic);
 
     fetchData();
+    fetchUser();
   }, []);
 
   return (
     <div className="container mx-auto p-10 max-w-screen-lg">
-      <StudentDashboardHeaderCard {...headerData!} />
+      <StudentDashboardHeaderCard
+        name={userDetails?.name!}
+        totalActive={totalActive}
+        totalComplete={totalComplete}
+      />
       <div className="flex w-full items-center justify-evenly my-8">
         <button
           onClick={() => {

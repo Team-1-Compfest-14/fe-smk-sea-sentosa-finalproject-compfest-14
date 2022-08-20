@@ -110,6 +110,7 @@ const InstructorCourse = () => {
       const moved = items[source.index];
       items.splice(source.index, 1);
       items.splice(destination.index, 0, moved);
+      moved.order = destination.index;
       setQuizzes(items);
     }
   };

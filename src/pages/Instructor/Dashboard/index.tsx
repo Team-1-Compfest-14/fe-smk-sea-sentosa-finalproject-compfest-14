@@ -44,6 +44,8 @@ const InstructorDashboard = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  console.log(verifiedCourses);
+
   return (
     <div className="p-10 my-5 flex flex-col items-center justify-center container mx-auto max-w-screen-lg">
       {/* Header Card */}
@@ -77,10 +79,6 @@ const InstructorDashboard = () => {
           verifiedCourses.map((course, index) => (
             <CourseCard
               key={index}
-              id={course.id}
-              name={course.name}
-              numOfStudents={course.total}
-              numOfSections={0}
               course={course}
               setShowConfirmDeleteCourseModal={setShowConfirmDeleteCourseModal}
             />
@@ -94,10 +92,6 @@ const InstructorDashboard = () => {
         pendingCourses.map((course, index) => (
           <CourseCard
             key={index}
-            id={course.id}
-            name={course.name}
-            numOfStudents={course.total}
-            numOfSections={0}
             course={course}
             setShowConfirmDeleteCourseModal={setShowConfirmDeleteCourseModal}
           />

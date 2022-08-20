@@ -5,23 +5,26 @@ import { useParams } from "react-router-dom";
 import { BASE_URL, refreshAuthLogic } from "../../../../api";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 import { Modal } from "../../../../components";
-import { ModuleContext } from "../../../../context";
+import { QuizContext } from "../../../../context";
 
-interface ConfirmDeleteLectureModalProp {
+interface ConfirmDeleteQuestionModalProp {
   handleBack: () => void;
 }
 
-const ConfirmDeleteLectureModal = ({ handleBack }: ConfirmDeleteLectureModalProp) => {
-  const { id: courseId } = useParams();
-  const { selectedLecture } = useContext(ModuleContext);
+const ConfirmDeleteQuestionModal = ({ handleBack }: ConfirmDeleteQuestionModalProp) => {
+  const { courseId, quizId } = useParams();
+  const { selectedQuestion, questions } = useContext(QuizContext);
+
+  const questionNumber = questions?.indexOf(selectedQuestion!)! + 1;
 
   const handleDeleteLecture = () => {
-    const lectureId = selectedLecture?.lecture.id;
+    const questionId = selectedQuestion?.id;
     createAuthRefreshInterceptor(axios, refreshAuthLogic);
     axios
-      .delete(`${BASE_URL}/courses/${courseId}/lectures/${lectureId}`)
-      .then(() => {
-        alert("Successfully deleted lecture!");
+      .delete(`${BASE_URL}/courses/${courseId}/quizzes/${quizId}/questions/${questionId}`)
+      // eslint-disable-next-line no-unused-vars
+      .then((res) => {
+        alert("Successfully deleted question!");
         window.location.reload();
         handleBack();
       })
@@ -38,11 +41,11 @@ const ConfirmDeleteLectureModal = ({ handleBack }: ConfirmDeleteLectureModalProp
           size={28}
           className="rounded-lg border-2 border-black cursor-pointer"
         />
-        <p className="font-bold text-xl gap-4 text-red-600">Deleting {selectedLecture?.name}</p>
+        <p className="font-bold text-xl gap-4 text-red-600">Deleting Question {questionNumber}</p>
       </div>
       {/* Message */}
       <div className="text-center text-red-600">
-        <p>Are you sure you want to delete {selectedLecture?.name}? </p>
+        <p>Are you sure you want to delete Question {questionNumber}? </p>
         <p className="font-bold">This cannot be undone.</p>
       </div>
       {/* Buttons */}
@@ -64,4 +67,4 @@ const ConfirmDeleteLectureModal = ({ handleBack }: ConfirmDeleteLectureModalProp
   );
 };
 
-export default ConfirmDeleteLectureModal;
+export default ConfirmDeleteQuestionModal;

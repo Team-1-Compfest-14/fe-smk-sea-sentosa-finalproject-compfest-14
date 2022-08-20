@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { CourseDetailCard, SimpleCourseCard } from "./Components";
 import { useDocumentTitle } from "../../../hooks";
-import axiosJWT from "../axiosJWT";
+import { BASE_URL, refreshAuthLogic } from "../../../api";
+import createAuthRefreshInterceptor from "axios-auth-refresh";
 import {
   StudentLectureDetailInterface,
   StudentQuizDetailInterface,
   StudentCourseDetailHeaderInterface
 } from "../../../typings";
+import axios from "axios";
 
 const StudentCourseDetail = () => {
   useDocumentTitle("Course Detail | Pelajarin");
@@ -21,16 +23,11 @@ const StudentCourseDetail = () => {
   const [detailCourseHeader, setDetailCourseHeader] =
     useState<StudentCourseDetailHeaderInterface>();
 
-  const accessToken = localStorage.getItem("accessToken");
-
   useEffect(() => {
-    const fetchData = async () => {
-      await axiosJWT
-        .get(`http://localhost:5000/courses/verified/${courseId}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        })
+    createAuthRefreshInterceptor(axios, refreshAuthLogic);
+    const fetchData = () => {
+      axios
+        .get(`${BASE_URL}/courses/verified/${courseId}`)
         .then((res) => {
           const { course } = res.data.data;
 
@@ -70,7 +67,7 @@ const StudentCourseDetail = () => {
 
           setQuizzes(tempQuizzes);
         })
-        .catch(async () => {
+        .catch(() => {
           alert("Error");
         });
     };
@@ -78,8 +75,9 @@ const StudentCourseDetail = () => {
     fetchData();
   }, []);
 
-  const handleQuizz = (quizId: number, isComplete: boolean) => {
+  const handleQuiz = (quizId: number, isComplete: boolean) => {
     if (isComplete) {
+      createAuthRefreshInterceptor(axios, refreshAuthLogic);
       navigate(`/student/courses/${courseId}/quizzes/${quizId}/feedback`);
     } else {
       navigate(`/student/courses/${courseId}/quizzes/${quizId}`);
@@ -88,15 +86,10 @@ const StudentCourseDetail = () => {
 
   const handleLecture = async (lectureId: number, lectureLink: string, isComplete: boolean) => {
     if (!isComplete) {
-      await axiosJWT.post(
-        `http://localhost:5000/courses/lectures/${lectureId}/complete`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        }
-      );
+      createAuthRefreshInterceptor(axios, refreshAuthLogic);
+      axios
+        .post(`${BASE_URL}/courses/lectures/${lectureId}/complete`)
+        .then((res) => console.log(res));
     }
     window.open(lectureLink, "_blank");
   };
@@ -130,27 +123,27 @@ const StudentCourseDetail = () => {
         </div>
 
         {showQuizzes && quizzes && lectures
-          ? lectures.map((item, index) => (
+          ? lectures.map((lecture, index) => (
               <SimpleCourseCard
                 key={index}
-                id={item.id}
+                id={lecture.id}
                 courseNumber={index + 1}
-                name={item.name}
-                isComplete={item.isComplete}
+                name={lecture.name}
+                isComplete={lecture.isComplete}
                 isQuiz={false}
                 handleLecture={handleLecture}
-                lectureLink={item.lectureLink}
+                lectureLink={lecture.lectureLink}
               />
             ))
-          : quizzes.map((item, index) => (
+          : quizzes.map((quiz, index) => (
               <SimpleCourseCard
                 key={index}
-                id={item.id}
+                id={quiz.id}
                 courseNumber={index + 1}
-                name={item.name}
-                isComplete={item.isComplete}
+                name={quiz.name}
+                isComplete={quiz.isComplete}
                 isQuiz={true}
-                handleQuiz={handleQuizz}
+                handleQuiz={handleQuiz}
               />
             ))}
       </div>

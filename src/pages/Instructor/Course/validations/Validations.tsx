@@ -38,9 +38,9 @@ export const questionValidationSchema = Yup.object().shape({
     .of(
       Yup.object().shape({
         option: Yup.string()
-          .required("Value must not be empty")
-          .min(4, "Value must be at least 4 characters")
-          .max(64, "Value must not exceed 64 characters"),
+          .required("Option must not be empty")
+          .min(4, "Option must be at least 4 characters")
+          .max(64, "Option must not exceed 64 characters"),
         isCorrectAnswer: Yup.boolean().required("Correct answer is required")
       })
     )

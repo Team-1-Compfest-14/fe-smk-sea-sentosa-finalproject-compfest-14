@@ -1,29 +1,17 @@
 import { useContext } from "react";
 import { MdDeleteForever, MdModeEdit } from "react-icons/md";
 import { MdBackpack } from "react-icons/md";
-import { RiBookMarkFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { CourseContext } from "../context";
 import { Course } from "../typings";
 
 interface CourseCardProps {
-  id: number;
-  name: string;
-  numOfStudents: number;
-  numOfSections: number;
   // eslint-disable-next-line no-unused-vars
   setShowConfirmDeleteCourseModal: (val: boolean) => void;
   course: Course;
 }
 
-const CourseCard = ({
-  id,
-  name,
-  numOfStudents,
-  numOfSections,
-  setShowConfirmDeleteCourseModal,
-  course
-}: CourseCardProps) => {
+const CourseCard = ({ setShowConfirmDeleteCourseModal, course }: CourseCardProps) => {
   const navigate = useNavigate();
   const { setSelectedCourse } = useContext(CourseContext);
   return (
@@ -31,23 +19,19 @@ const CourseCard = ({
       {/* Details */}
       <div className="my-auto flex justify-between items-center">
         <div>
-          <p className="text-2xl font-bold mb-2">{name}</p>
+          <p className="text-2xl font-bold mb-2">{course.name}</p>
           <p className="flex items-center">
             <MdBackpack className="mr-2" size={20} />
-            {numOfStudents ? numOfStudents : "No"} students enrolled
-          </p>
-          <p className="flex items-center">
-            <RiBookMarkFill className="mr-2" size={20} />
-            {numOfSections} sections
+            {course.total ?? "No"} {course.total > 1 ? "students" : "student"} enrolled
           </p>
         </div>
       </div>
-      {/* Edit */}
-      <div className="flex gap-4">
+      <div className="flex items-center gap-4">
+        {/* Edit Button */}
         <div
           className="flex flex-col items-center justify-center cursor-pointer p-4 hover:bg-slate-200 hover:rounded-xl"
           onClick={() => {
-            navigate(`/instructor/courses/${id}`);
+            navigate(`/instructor/courses/${course.id}`);
           }}
         >
           <MdModeEdit size={32} />

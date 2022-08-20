@@ -14,6 +14,7 @@ export type Course = {
   description: string;
   isVerified: boolean;
   total: number;
+  numOfSections?: number;
 };
 
 export type Lecture = {
@@ -28,6 +29,7 @@ export type Lecture = {
 export type Option = {
   option: string;
   isCorrectAnswer: boolean;
+  mandatory?: boolean;
 };
 
 export type Question = {

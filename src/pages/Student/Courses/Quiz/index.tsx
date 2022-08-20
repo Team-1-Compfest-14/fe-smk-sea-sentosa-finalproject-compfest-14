@@ -6,7 +6,8 @@ import { IoChevronBack } from "react-icons/io5";
 import { QuestionCard, ConfirmExitModal } from "../Components";
 import { answersInterface, QuestionStudent } from "../../../../typings";
 import { useDocumentTitle } from "../../../../hooks";
-import axiosJWT from "../../axiosJWT";
+import { BASE_URL } from "../../../../api";
+import axios from "axios";
 
 interface questionAnswersInterface {
   answers: answersInterface[];
@@ -23,13 +24,8 @@ const StudentQuiz = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const accessToken = localStorage.getItem("accessToken");
-      await axiosJWT
-        .get(`http://localhost:5000/courses/${courseId}/quizzes/${quizId}/`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        })
+      await axios
+        .get(`${BASE_URL}/courses/${courseId}/quizzes/${quizId}/`)
         .then((res) => {
           const { quizName, questions } = res.data.data;
           setQuestionsData(questions);
@@ -64,18 +60,10 @@ const StudentQuiz = () => {
 
     const accessToken = localStorage.getItem("accessToken");
 
-    await axiosJWT
-      .post(
-        `http://localhost:5000/courses/${courseId}/quizzes/${quizId}/answer`,
-        {
-          answers: studentAnswers
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        }
-      )
+    await axios
+      .post(`${BASE_URL}/courses/${courseId}/quizzes/${quizId}/answer`, {
+        answers: studentAnswers
+      })
       .then(() => {
         alert("You have finished the quiz");
         navigate(`/student/courses/${courseId}/quizzes/${quizId}/feedback`);

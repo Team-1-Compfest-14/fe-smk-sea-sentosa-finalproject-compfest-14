@@ -1,44 +1,47 @@
 import { useForm } from "react-hook-form";
 import { IoChevronBack } from "react-icons/io5";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { quizValidationSchema } from "../validations/Validations";
 import { Modal } from "../../../../components";
+import { quizValidationSchema } from "../../Course/validations/Validations";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { BASE_URL, refreshAuthLogic } from "../../../../api";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
+import { Quiz } from "../../../../typings";
 
-interface AddQuizModalProp {
+interface EditQuizNameModalProp {
   handleBack: () => void;
+  quiz: Quiz;
 }
 
 interface FormValues {
   name: string;
 }
 
-const AddQuizModal = ({ handleBack }: AddQuizModalProp) => {
+const EditQuizNameModal = ({ handleBack, quiz }: EditQuizNameModalProp) => {
   const {
     register,
     handleSubmit,
     formState: { errors }
   } = useForm<FormValues>({ resolver: yupResolver(quizValidationSchema) });
 
-  const { id: courseId } = useParams();
+  const { courseId, quizId } = useParams();
+  console.log(quiz);
 
   const onSubmit = handleSubmit((data) => {
     const { name } = data;
     createAuthRefreshInterceptor(axios, refreshAuthLogic);
     axios
-      .post(`${BASE_URL}/courses/${courseId}/quizzes`, {
+      .put(`${BASE_URL}/courses/${courseId}/quizzes/${quizId}`, {
         name
       })
       // eslint-disable-next-line no-unused-vars
       .then((res) => {
-        alert("Successfully added quiz!");
+        alert("Successfully edited quiz!");
         window.location.reload();
+        handleBack();
       })
       .catch((err) => console.log(err));
-    handleBack();
   });
 
   return (
@@ -52,7 +55,7 @@ const AddQuizModal = ({ handleBack }: AddQuizModalProp) => {
           size={28}
           className="bg-orange-light rounded-lg border border-black cursor-pointer"
         />
-        Adding a new quiz
+        Editing {quiz.name}
       </p>
       {/* Form */}
       <form onSubmit={onSubmit}>
@@ -61,6 +64,7 @@ const AddQuizModal = ({ handleBack }: AddQuizModalProp) => {
           <label>Name</label>
           <input
             type="text"
+            defaultValue={quiz.name}
             placeholder="Integrals Drilling"
             className="border border-black px-3 py-2 rounded-lg w-full"
             {...register("name")}
@@ -71,8 +75,8 @@ const AddQuizModal = ({ handleBack }: AddQuizModalProp) => {
         <div className="flex flex-1 flex-col gap-2 mt-4">
           <input
             type="submit"
-            className="bg-blue text-white px-5 py-2 border border-black rounded-lg hover:bg-blue-dark"
-            value="Add"
+            className="bg-blue text-white px-5 py-2 border border-black rounded-lg hover:bg-blue-dark hover:cursor-pointer"
+            value="Save"
           />
           <button
             onClick={() => handleBack()}
@@ -86,4 +90,4 @@ const AddQuizModal = ({ handleBack }: AddQuizModalProp) => {
   );
 };
 
-export default AddQuizModal;
+export default EditQuizNameModal;

@@ -60,10 +60,7 @@ const Home = () => {
         <div>
           <p className="font-bold text-2xl mb-5">Teachers can...</p>
           {teacherFeatures.map((feature, index) => {
-            return (
-              // Known bug: brownnya suka ngga keluar
-              <FeatureCard feature={feature} index={index} key={index} accentColor="brown" />
-            );
+            return <FeatureCard feature={feature} index={index} key={index} accentColor="blue" />;
           })}
         </div>
         {/* Right Side */}

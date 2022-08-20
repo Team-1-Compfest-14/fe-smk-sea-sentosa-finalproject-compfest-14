@@ -5,6 +5,7 @@ import { QuestionCard } from "../Components";
 import axiosJWT from "../../axiosJWT";
 import { useDocumentTitle } from "../../../../hooks";
 import { QuestionStudent } from "../../../../typings";
+import { BASE_URL } from "../../../../api";
 
 const StudentQuizFeedback = () => {
   useDocumentTitle("Quiz Feedback | Pelajarin");
@@ -17,7 +18,7 @@ const StudentQuizFeedback = () => {
     const fetchData = async () => {
       const accessToken = localStorage.getItem("accessToken");
       await axiosJWT
-        .get(`http://localhost:5000/courses/${courseId}/quizzes/${quizId}/feedback`, {
+        .get(`${BASE_URL}/courses/${courseId}/quizzes/${quizId}/feedback`, {
           headers: {
             Authorization: `Bearer ${accessToken}`
           }

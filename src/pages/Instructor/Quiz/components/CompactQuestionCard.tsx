@@ -12,7 +12,8 @@ interface CompactQuestionCardProp {
 }
 
 const CompactQuestionCard = ({ provided, index, question }: CompactQuestionCardProp) => {
-  const { setSelectedQuestion, setShowEditQuestionModal } = useContext(QuizContext);
+  const { setSelectedQuestion, setShowEditQuestionModal, setShowConfirmDeleteQuestionModal } =
+    useContext(QuizContext);
   return (
     <div
       className="bg-white border border-black rounded-xl px-8 py-2 flex items-center justify-between mt-4"
@@ -37,6 +38,17 @@ const CompactQuestionCard = ({ provided, index, question }: CompactQuestionCardP
         >
           <MdModeEdit size={32} />
           <p className="font-bold">Edit</p>
+        </div>
+        {/* Delete Button */}
+        <div
+          className="text-sm flex flex-col items-center justify-center cursor-pointer p-2 hover:bg-slate-200 hover:rounded-xl text-red-600"
+          onClick={() => {
+            setSelectedQuestion(question);
+            setShowConfirmDeleteQuestionModal(true);
+          }}
+        >
+          <MdDeleteForever size={32} />
+          <p className="font-bold">Delete</p>
         </div>
       </div>
     </div>

@@ -31,7 +31,7 @@ const Register = () => {
   const onSubmit = handleSubmit(async (data) => {
     const { name, email, password } = data;
     axios
-      .post(`${BASE_URL}auth/register`, {
+      .post(`${BASE_URL}/auth/register`, {
         role: selectedRole,
         name,
         email,
