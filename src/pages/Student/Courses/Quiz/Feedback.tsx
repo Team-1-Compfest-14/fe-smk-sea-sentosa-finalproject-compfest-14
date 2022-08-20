@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { IoChevronBack } from "react-icons/io5";
 import { QuestionCard } from "../Components";
-import axiosJWT from "../../axiosJWT";
 import { useDocumentTitle } from "../../../../hooks";
 import { QuestionStudent } from "../../../../typings";
-import { BASE_URL } from "../../../../api";
+import { BASE_URL, refreshAuthLogic } from "../../../../api";
+import createAuthRefreshInterceptor from "axios-auth-refresh";
+import axios from "axios";
 
 const StudentQuizFeedback = () => {
   useDocumentTitle("Quiz Feedback | Pelajarin");
@@ -15,27 +16,23 @@ const StudentQuizFeedback = () => {
   const [quizName, setQuizName] = useState("Quiz");
 
   useEffect(() => {
-    const fetchData = async () => {
-      const accessToken = localStorage.getItem("accessToken");
-      await axiosJWT
-        .get(`${BASE_URL}/courses/${courseId}/quizzes/${quizId}/feedback`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        })
-        .then((res) => {
-          const { quizName, questions } = res.data.data;
-          setQuestionsData(questions);
-          setQuizName(quizName);
-        })
-        .catch(() => {
-          alert("There's an error");
-          navigate(`/student/dashboard`);
-        });
-    };
-
+    createAuthRefreshInterceptor(axios, refreshAuthLogic);
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    await axios
+      .get(`${BASE_URL}/courses/${courseId}/quizzes/${quizId}/feedback`)
+      .then((res) => {
+        const { quizName, questions } = res.data.data;
+        setQuestionsData(questions);
+        setQuizName(quizName);
+      })
+      .catch(() => {
+        alert("There's an error");
+        navigate(`/student/dashboard`);
+      });
+  };
 
   return (
     <div className="p-10 flex flex-col items-center justify-center">

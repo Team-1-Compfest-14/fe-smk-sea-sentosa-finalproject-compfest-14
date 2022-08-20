@@ -77,7 +77,6 @@ const StudentCourseDetail = () => {
 
   const handleQuiz = (quizId: number, isComplete: boolean) => {
     if (isComplete) {
-      createAuthRefreshInterceptor(axios, refreshAuthLogic);
       navigate(`/student/courses/${courseId}/quizzes/${quizId}/feedback`);
     } else {
       navigate(`/student/courses/${courseId}/quizzes/${quizId}`);
@@ -88,8 +87,11 @@ const StudentCourseDetail = () => {
     if (!isComplete) {
       createAuthRefreshInterceptor(axios, refreshAuthLogic);
       axios
-        .post(`${BASE_URL}/courses/lectures/${lectureId}/complete`)
-        .then((res) => console.log(res));
+        .post(`${BASE_URL}/courses/lectures/${lectureId}/complete`, {
+          lectureId
+        })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
     }
     window.open(lectureLink, "_blank");
   };

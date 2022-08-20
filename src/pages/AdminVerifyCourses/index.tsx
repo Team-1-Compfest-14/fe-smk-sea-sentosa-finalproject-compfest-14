@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
+import { BASE_URL } from "../../api";
 
 function AdminVerifyCourses() {
   const [course, setCourses]: any = useState([]);
@@ -14,7 +15,7 @@ function AdminVerifyCourses() {
       const currentDate = new Date();
       if (expire * 1000 < currentDate.getTime()) {
         // expired access token
-        const response = await axios.post("http://localhost:8080/auth/refresh");
+        const response = await axios.post(`${BASE_URL}/auth/refresh`);
         const { accessToken } = response.data.data;
         config.headers.Authorization = `Bearer ${accessToken}`;
         setToken(accessToken);
@@ -30,7 +31,7 @@ function AdminVerifyCourses() {
   );
 
   const getUnverifiedCourse = async () => {
-    const response = await axiosJWT.get("http://localhost:8080/approval/courses", {
+    const response = await axiosJWT.get(`${BASE_URL}/approval/courses`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -42,7 +43,7 @@ function AdminVerifyCourses() {
 
   const approveHandlingData = async (event: any, courseId: any, status: any) => {
     await axiosJWT.post(
-      `http://localhost:8080/approval/courses/${courseId}`,
+      `${BASE_URL}/approval/courses/${courseId}`,
       { approved: status },
       {
         headers: {
@@ -50,7 +51,7 @@ function AdminVerifyCourses() {
         }
       }
     );
-    const response = await axiosJWT.get("http://localhost:8080/approval/courses", {
+    const response = await axiosJWT.get(`${BASE_URL}/approval/courses`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
