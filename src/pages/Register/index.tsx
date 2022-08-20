@@ -76,12 +76,12 @@ const Register = () => {
   ];
 
   return (
-    <div className="px-8 py-16">
+    <div className="px-8 py-16 max-w-screen-sm mx-auto container">
       <p className="text-center text-xl font-bold mb-10">
         Register to get the full benefit of Pelajarin.
       </p>
       {/* Form */}
-      <div className="p-10 border-2 border-black w-1/3 rounded-xl mx-auto">
+      <div className="p-10 border-2 border-black rounded-xl mx-auto">
         <form onSubmit={onSubmit}>
           {/* Role */}
           <div className="mb-4">

@@ -18,7 +18,7 @@ const Home = () => {
   useDocumentTitle("Pelajarin | Learn more, easier.");
 
   return (
-    <div className="container mx-auto">
+    <div>
       {/* Hero */}
       <div className="my-10 container mx-auto">
         <p className="font-display text-3xl text-center">Learn more, easier.</p>
@@ -28,7 +28,7 @@ const Home = () => {
       <Divider />
 
       {/* Student Features */}
-      <div className="p-10 md:p-0">
+      <div className="p-10 md:p-0 container mx-auto">
         <div className="flex items-center justify-around">
           {/* Left Side */}
           <div className="w-1/2">
@@ -52,7 +52,7 @@ const Home = () => {
       <Divider />
 
       {/* Teacher Features */}
-      <div className="flex items-center justify-around ">
+      <div className="flex items-center justify-around container mx-auto">
         {/* Left Side */}
         <TeacherLeftArt className="md:w-1/6" />
 

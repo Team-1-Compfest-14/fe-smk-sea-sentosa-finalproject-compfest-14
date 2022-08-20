@@ -67,12 +67,12 @@ const Login = () => {
   ];
 
   return (
-    <div className="px-8 py-16">
+    <div className="px-8 py-16 max-w-screen-sm mx-auto container">
       <p className="text-center text-xl font-bold mb-10">
         Log in and Pelajarin all the things inside :)
       </p>
       {/* Form */}
-      <div className="p-10 border-2 border-black w-1/3 rounded-xl mx-auto">
+      <div className="p-10 border-2 border-black rounded-xl">
         <form onSubmit={onSubmit}>
           {/* Other Attributes */}
           {formDetails.map(({ displayName, inputName, type, placeholder, error }, index) => (
