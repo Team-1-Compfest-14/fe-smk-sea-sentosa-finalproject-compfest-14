@@ -15,6 +15,8 @@ import { Lecture, Quiz } from "../../../typings";
 import { CourseContext, ModuleContext } from "../../../context";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { BASE_URL, refreshAuthLogic } from "../../../api";
+import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 const InstructorCourse = () => {
   const { id: courseId } = useParams();
@@ -22,22 +24,29 @@ const InstructorCourse = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    // Refresh token handler
+    createAuthRefreshInterceptor(axios, refreshAuthLogic);
+
+    // Get selected course
     axios
-      .get(`http://localhost:5000/courses/instructor/own/${courseId}`)
+      .get(`${BASE_URL}/courses/instructor/own/${courseId}`)
       .then((res) => {
         const { course } = res.data.data;
         setSelectedCourse(course);
       })
       .catch((err) => console.log(err));
+    // Get instructor's course lectures
     axios
-      .get(`http://localhost:5000/courses/instructor/own/${courseId}/lectures`)
+      .get(`${BASE_URL}/courses/instructor/own/${courseId}/lectures`)
       .then((res) => {
         const { lectures } = res.data.data;
         setLectures(lectures);
       })
       .catch((err) => console.log(err));
+    // Get instructor's course quizzes
     axios
-      .get(`http://localhost:5000/courses/${courseId}/quizzes/instructor`)
+      .get(`${BASE_URL}/courses/${courseId}/quizzes/instructor`)
       .then((res) => {
         const { quizzes } = res.data.data;
         setQuizzes(quizzes);
@@ -50,7 +59,7 @@ const InstructorCourse = () => {
   useDocumentTitle(`Edit ${selectedCourse?.name} | Pelajarin`);
 
   // Lecture states and props
-  const [lectures, setLectures] = useState<Lecture[] | null>(null);
+  const [lectures, setLectures] = useState<Lecture[]>([]);
   const [selectedLecture, setSelectedLecture] = useState<Lecture | null>(null);
 
   const [showAddLectureModal, setShowAddLectureModal] = useState(false);
@@ -105,7 +114,6 @@ const InstructorCourse = () => {
     }
   };
 
-  console.log(quizzes);
   return (
     <ModuleContext.Provider
       value={{
@@ -149,8 +157,8 @@ const InstructorCourse = () => {
           <Droppable droppableId="lectures">
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                {showLectures
-                  ? lectures?.length! > 0 &&
+                {showLectures ? (
+                  lectures?.length! > 0 ? (
                     lectures?.map((lecture, index) => (
                       <Draggable key={lecture.id} draggableId={lecture.id.toString()} index={index}>
                         {(provided) => (
@@ -158,12 +166,22 @@ const InstructorCourse = () => {
                         )}
                       </Draggable>
                     ))
-                  : quizzes?.length! > 0 &&
-                    quizzes?.map((quiz, index) => (
-                      <Draggable key={quiz.id} draggableId={quiz.id.toString()} index={index}>
-                        {(provided) => <QuizCard provided={provided} index={index} quiz={quiz} />}
-                      </Draggable>
-                    ))}
+                  ) : (
+                    <p className="text-center p-10 bg-black text-white rounded-lg">
+                      No lectures added yet.
+                    </p>
+                  )
+                ) : quizzes?.length! > 0 ? (
+                  quizzes?.map((quiz, index) => (
+                    <Draggable key={quiz.id} draggableId={quiz.id.toString()} index={index}>
+                      {(provided) => <QuizCard provided={provided} index={index} quiz={quiz} />}
+                    </Draggable>
+                  ))
+                ) : (
+                  <p className="text-center p-10 bg-black text-white rounded-lg">
+                    No quizzes added yet.
+                  </p>
+                )}
                 {provided.placeholder}
               </div>
             )}

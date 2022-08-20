@@ -2,30 +2,41 @@ import axios from "axios";
 import { useDocumentTitle } from "../../../hooks";
 import { CourseCard, HeaderCard } from "../../../components";
 import { useContext, useEffect, useState } from "react";
-import { AddCourseModal } from "./components";
+import { AddCourseModal, ConfirmDeleteCourseModal } from "./components";
 import { CourseContext } from "../../../context";
-import { UserDetails } from "../../../typings";
+import { Course, UserDetails } from "../../../typings";
+import { BASE_URL } from "../../../api";
+import createAuthRefreshInterceptor from "axios-auth-refresh";
+import { refreshAuthLogic } from "../../../api";
 
 const InstructorDashboard = () => {
-  const { courses, setCourses } = useContext(CourseContext);
+  const { setCourses, selectedCourse } = useContext(CourseContext);
+  const [verifiedCourses, setVerifiedCourses] = useState<Course[]>([]);
+  const [pendingCourses, setPendingCourses] = useState<Course[]>([]);
 
   const [showVerified, setShowVerified] = useState(true);
-  const [showAddCourse, setShowAddCourse] = useState(false);
+  const [showAddCourseModal, setShowAddCourseModal] = useState(false);
+  const [showConfirmDeleteCourseModal, setShowConfirmDeleteCourseModal] = useState(false);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
 
   useDocumentTitle(`${userDetails?.name}'s Courses | Pelajarin`);
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Refresh token handler
+    createAuthRefreshInterceptor(axios, refreshAuthLogic);
+    // Get all instructor's courses
     axios
-      .get("http://localhost:5000/courses/instructor/own")
+      .get(`${BASE_URL}/courses/instructor/own`)
       .then((res) => {
         const { courses } = res.data.data;
         setCourses(courses);
+        setVerifiedCourses(courses.filter((course: Course) => course.isVerified === true));
+        setPendingCourses(courses.filter((course: Course) => course.isVerified === false));
       })
       .catch((err) => console.log(err));
-
+    // Get user profile
     axios
-      .get("http://localhost:5000/users/profile")
+      .get(`${BASE_URL}/users/profile`)
       .then((res) => {
         const { user } = res.data.data;
         setUserDetails(user);
@@ -61,26 +72,48 @@ const InstructorDashboard = () => {
         </button>
       </div>
       {/* Courses */}
-      {courses
-        ?.filter((course) =>
-          showVerified ? course.isVerified === true : course.isVerified === false
+      {showVerified ? (
+        verifiedCourses.length > 0 ? (
+          verifiedCourses.map((course, index) => (
+            <CourseCard
+              key={index}
+              id={course.id}
+              name={course.name}
+              numOfStudents={course.total}
+              numOfSections={0}
+              course={course}
+              setShowConfirmDeleteCourseModal={setShowConfirmDeleteCourseModal}
+            />
+          ))
+        ) : (
+          <p className="p-10 w-full text-center bg-black text-white rounded-lg my-8">
+            No verified courses yet.
+          </p>
         )
-        .map((course, index) => (
+      ) : pendingCourses.length > 0 ? (
+        pendingCourses.map((course, index) => (
           <CourseCard
             key={index}
             id={course.id}
             name={course.name}
             numOfStudents={course.total}
             numOfSections={0}
+            course={course}
+            setShowConfirmDeleteCourseModal={setShowConfirmDeleteCourseModal}
           />
-        ))}
+        ))
+      ) : (
+        <p className="p-10 w-full text-center bg-black text-white rounded-lg my-8">
+          No pending courses.
+        </p>
+      )}
       {/* Add Course Button */}
       {!showVerified && (
         <div className="flex justify-end w-full">
           <button
             onClick={() => {
               document.body.style.overflow = "hidden";
-              setShowAddCourse(true);
+              setShowAddCourseModal(true);
             }}
             className="bg-blue text-white px-3 py-4 rounded-xl border border-black hover:bg-blue-dark"
           >
@@ -90,12 +123,21 @@ const InstructorDashboard = () => {
       )}
 
       {/* Add Course Modal */}
-      {showAddCourse && (
+      {showAddCourseModal && (
         <AddCourseModal
           handleBack={() => {
             document.body.style.overflow = "auto";
-            setShowAddCourse(false);
+            setShowAddCourseModal(false);
           }}
+        />
+      )}
+      {showConfirmDeleteCourseModal && (
+        <ConfirmDeleteCourseModal
+          handleBack={() => {
+            document.body.style.overflow = "auto";
+            setShowConfirmDeleteCourseModal(false);
+          }}
+          course={selectedCourse!}
         />
       )}
     </div>

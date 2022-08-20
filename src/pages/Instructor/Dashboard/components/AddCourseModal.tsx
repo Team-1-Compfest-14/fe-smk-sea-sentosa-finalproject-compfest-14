@@ -4,6 +4,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { courseValidationSchema } from "../../Course/validations/Validations";
 import { Modal } from "../../../../components";
 import axios from "axios";
+import { BASE_URL, refreshAuthLogic } from "../../../../api";
+import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 interface AddCourseModalProp {
   handleBack: () => void;
@@ -23,8 +25,9 @@ const AddCourseModal = ({ handleBack }: AddCourseModalProp) => {
 
   const onSubmit = handleSubmit((data) => {
     const { name, description } = data;
+    createAuthRefreshInterceptor(axios, refreshAuthLogic);
     axios
-      .post("http://localhost:5000/courses", {
+      .post(`${BASE_URL}/courses`, {
         name,
         description
       })

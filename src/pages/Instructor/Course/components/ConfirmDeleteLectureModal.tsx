@@ -2,6 +2,8 @@ import axios from "axios";
 import { useContext } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { useParams } from "react-router-dom";
+import { BASE_URL, refreshAuthLogic } from "../../../../api";
+import createAuthRefreshInterceptor from "axios-auth-refresh";
 import { Modal } from "../../../../components";
 import { ModuleContext } from "../../../../context";
 
@@ -15,8 +17,9 @@ const ConfirmDeleteLectureModal = ({ handleBack }: ConfirmDeleteLectureModalProp
 
   const handleDeleteLecture = () => {
     const lectureId = selectedLecture?.id;
+    createAuthRefreshInterceptor(axios, refreshAuthLogic);
     axios
-      .delete(`http://localhost:5000/courses/${courseId}/lectures/${lectureId}`)
+      .delete(`${BASE_URL}/courses/${courseId}/lectures/${lectureId}`)
       .then((res) => {
         console.log(res.data);
         alert("Successfully deleted lecture!");

@@ -8,6 +8,8 @@ import { useState } from "react";
 import { MdDeleteForever } from "react-icons/md";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { BASE_URL, refreshAuthLogic } from "../../../../api";
+import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 interface AddQuestionModalProp {
   handleBack: () => void;
@@ -42,8 +44,9 @@ const AddQuestionModal = ({ handleBack }: AddQuestionModalProp) => {
       setInvalidOptions(true);
       return;
     }
+    createAuthRefreshInterceptor(axios, refreshAuthLogic);
     axios
-      .post(`http://localhost:5000/courses/${courseId}/quizzes/${quizId}/questions`, {
+      .post(`${BASE_URL}/courses/${courseId}/quizzes/${quizId}/questions`, {
         question: data.question,
         questionOptions: data.options
       })

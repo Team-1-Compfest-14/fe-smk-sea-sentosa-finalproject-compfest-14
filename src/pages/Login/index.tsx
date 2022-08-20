@@ -7,6 +7,7 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { useContext } from "react";
 import { LoginContext } from "../../context";
+import { BASE_URL } from "../../api";
 
 interface FormValues {
   email: string;
@@ -24,29 +25,32 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit((data) => {
     const { email, password } = data;
-    const response = await axios.post("http://localhost:5000/auth/login", {
-      email: email,
-      password: password
-    });
-    const { status } = response.data;
-    const { accessToken } = response.data.data;
-    const decoded = jwt_decode(accessToken);
-    if (status === "success") {
-      const { role }: any = decoded;
-      localStorage.setItem("accessToken", accessToken);
-      setUser({ accessToken: accessToken });
-      if (role === 2) {
-        navigate("/admin/instructors");
-      } else if (role === 1) {
-        navigate("/instructor/dashboard");
-      } else {
-        navigate("/student/dashboard");
-      }
-    } else {
-      console.log("error");
-    }
+    axios
+      .post(`${BASE_URL}/auth/login`, {
+        email: email,
+        password: password
+      })
+      .then((res) => {
+        const { status } = res.data;
+        const { accessToken } = res.data.data;
+        const decoded = jwt_decode(accessToken);
+        if (status === "success") {
+          const { role }: any = decoded;
+          localStorage.setItem("accessToken", accessToken);
+          setUser({ accessToken: accessToken });
+          if (role === 2) {
+            navigate("/admin/instructors");
+          } else if (role === 1) {
+            navigate("/instructor/dashboard");
+          } else {
+            navigate("/student/dashboard");
+          }
+          alert("Successfully logged in!");
+        }
+      })
+      .catch((err) => alert(err.response.data.message));
   });
 
   const formDetails = [
@@ -85,7 +89,7 @@ const Login = () => {
                 className="py-3 pl-4 border-2 border-black rounded-xl w-full"
                 {...register(inputName as "email" | "password")}
               />
-              <p>{error}</p>
+              <p className="text-red-600">{error}</p>
             </div>
           ))}
           {/* Log In */}

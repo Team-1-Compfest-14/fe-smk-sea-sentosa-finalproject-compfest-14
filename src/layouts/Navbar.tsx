@@ -10,7 +10,7 @@ const Navbar = () => {
     const decoded = jwt_decode(user?.accessToken!);
     const { role }: any = decoded;
     return (
-      <div className="bg-orange-light px-10 lg:px-32 py-6 border-b border-black flex items-center justify-between top-0 sticky">
+      <div className="bg-orange-light px-10 lg:px-32 py-6 border-b border-black flex items-center justify-between top-0 sticky z-40">
         {/* Logo */}
         <Logo />
 
@@ -47,7 +47,7 @@ const Navbar = () => {
         <MenuOption
           text="Register"
           route="/register"
-          style="bg-blue px-4 py-2 text-white rounded-lg border border-black cursor-pointer"
+          style="bg-blue px-4 py-2 text-white rounded-lg border border-black cursor-pointer hover:bg-blue-dark"
         />
       </div>
     </div>

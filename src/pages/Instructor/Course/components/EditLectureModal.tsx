@@ -7,6 +7,8 @@ import { useContext } from "react";
 import { ModuleContext } from "../../../../context";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { BASE_URL, refreshAuthLogic } from "../../../../api";
+import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 interface EditLectureModalProp {
   handleBack: () => void;
@@ -49,8 +51,11 @@ const EditLectureModal = ({ handleBack }: EditLectureModalProp) => {
   const onSubmit = handleSubmit((data) => {
     const { name, lectureLink } = data;
     const moduleId = selectedLecture?.lecture.moduleId;
+    // Refresh token handler
+    createAuthRefreshInterceptor(axios, refreshAuthLogic);
+    // Edit lecture handler
     axios
-      .put(`http://localhost:5000/courses/${courseId}/modules/${moduleId}/lectures`, {
+      .put(`${BASE_URL}/courses/${courseId}/modules/${moduleId}/lectures`, {
         name,
         lectureLink
       })

@@ -12,7 +12,7 @@ interface MenuOptionProps {
 
 const MenuOptionButton = ({ text, route, style, useIcon }: MenuOptionProps) => {
   return (
-    <Link to={route} className={style ?? "font-bold mr-24"}>
+    <Link to={route} className={style ?? "font-bold mr-24 hover:underline"}>
       <div className="flex items-center justify-center">
         {useIcon &&
           (useIcon === "instructor" ? (

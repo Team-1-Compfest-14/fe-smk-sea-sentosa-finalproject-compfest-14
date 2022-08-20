@@ -20,16 +20,22 @@ const Router = () => {
   const [user, setUser] = useState<User>({
     accessToken: localStorage.getItem("accessToken") ?? null
   });
+  axios.defaults.headers.common["Authorization"] = `Bearer ${user?.accessToken}`;
 
   const [courses, setCourses] = useState<Course[] | null>(null);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 
-  axios.defaults.headers.common["Authorization"] = `Bearer ${user?.accessToken}`;
-
   return (
     <BrowserRouter>
       <LoginContext.Provider value={{ user, setUser }}>
-        <CourseContext.Provider value={{ courses, setCourses, selectedCourse, setSelectedCourse }}>
+        <CourseContext.Provider
+          value={{
+            courses,
+            setCourses,
+            selectedCourse,
+            setSelectedCourse
+          }}
+        >
           {/* idea https://stackoverflow.com/questions/59812003/tailwindcss-fixed-sticky-footer-on-the-bottom */}
           <div className="flex flex-col w-full h-screen justify-between">
             <Navbar />

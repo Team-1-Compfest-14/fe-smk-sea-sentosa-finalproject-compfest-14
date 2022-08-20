@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import { ModuleContext } from "../../../../context";
 import axios from "axios";
 import { Quiz, QuizData } from "../../../../typings";
+import { BASE_URL } from "../../../../api";
 
 interface QuizCardProp {
   provided: DraggableProvided;
@@ -22,7 +23,7 @@ const QuizCard = ({ provided, index, quiz }: QuizCardProp) => {
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/courses/${courseId}/quizzes/${quizId}`)
+      .get(`${BASE_URL}/courses/${courseId}/quizzes/${quizId}`)
       .then((res) => {
         const { data } = res.data;
         setQuizData(data);

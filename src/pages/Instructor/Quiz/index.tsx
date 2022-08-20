@@ -7,19 +7,20 @@ import { Question } from "../../../typings";
 import {
   AddQuestionModal,
   CompactQuestionCard,
-  ConfirmDeleteQuestionModal,
   EditQuestionModal,
   StudentQuestionCard
 } from "./components";
 import axios from "axios";
+import { BASE_URL, refreshAuthLogic } from "../../../api";
+import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 const InstructorQuiz = () => {
   const [questions, setQuestions] = useState<Question[] | null>(null);
   const { courseId, quizId } = useParams();
-
+  createAuthRefreshInterceptor(axios, refreshAuthLogic);
   const getQuestions = () => {
     axios
-      .get(`http://localhost:5000/courses/${courseId}/quizzes/${quizId}`)
+      .get(`${BASE_URL}/courses/${courseId}/quizzes/${quizId}`)
       .then((res) => {
         const { questions } = res.data.data;
         setQuestions(questions);
@@ -36,10 +37,9 @@ const InstructorQuiz = () => {
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
   const [showEditQuestionModal, setShowEditQuestionModal] = useState(false);
-  const [showConfirmDeleteQuestionModal, setShowConfirmDeleteQuestionModal] = useState(false);
   const navigate = useNavigate();
 
-  const handleBackModal = (action: "add" | "edit" | "delete") => {
+  const handleBackModal = (action: "add" | "edit") => {
     document.body.style.overflow = "auto";
     switch (action) {
       case "add":
@@ -47,9 +47,6 @@ const InstructorQuiz = () => {
         break;
       case "edit":
         setShowEditQuestionModal(false);
-        break;
-      case "delete":
-        setShowConfirmDeleteQuestionModal(false);
         break;
     }
   };
@@ -72,8 +69,7 @@ const InstructorQuiz = () => {
         setQuestions,
         selectedQuestion,
         setSelectedQuestion,
-        setShowEditQuestionModal,
-        setShowConfirmDeleteQuestionModal
+        setShowEditQuestionModal
       }}
     >
       <div className="container mx-auto p-10 max-w-screen-lg">
@@ -161,9 +157,6 @@ const InstructorQuiz = () => {
         </div>
         {showAddQuestionModal && <AddQuestionModal handleBack={() => handleBackModal("add")} />}
         {showEditQuestionModal && <EditQuestionModal handleBack={() => handleBackModal("edit")} />}
-        {showConfirmDeleteQuestionModal && (
-          <ConfirmDeleteQuestionModal handleBack={() => handleBackModal("delete")} />
-        )}
       </div>
     </QuizContext.Provider>
   );

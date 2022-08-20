@@ -8,7 +8,6 @@ type QuizContextType = {
   setQuestions: (question: Question[]) => void;
   setSelectedQuestion: (question: Question) => void;
   setShowEditQuestionModal: (val: boolean) => void;
-  setShowConfirmDeleteQuestionModal: (val: boolean) => void;
 };
 
 export const QuizContext = createContext<QuizContextType>({
@@ -16,6 +15,5 @@ export const QuizContext = createContext<QuizContextType>({
   selectedQuestion: null,
   setQuestions: () => {},
   setSelectedQuestion: () => {},
-  setShowEditQuestionModal: () => {},
-  setShowConfirmDeleteQuestionModal: () => {}
+  setShowEditQuestionModal: () => {}
 });

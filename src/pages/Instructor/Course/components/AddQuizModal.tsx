@@ -5,8 +5,8 @@ import { quizValidationSchema } from "../validations/Validations";
 import { Modal } from "../../../../components";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { ModuleContext } from "../../../../context";
-import { useContext } from "react";
+import { BASE_URL, refreshAuthLogic } from "../../../../api";
+import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 interface AddQuizModalProp {
   handleBack: () => void;
@@ -24,13 +24,12 @@ const AddQuizModal = ({ handleBack }: AddQuizModalProp) => {
   } = useForm<FormValues>({ resolver: yupResolver(quizValidationSchema) });
 
   const { id: courseId } = useParams();
-  const { selectedQuiz } = useContext(ModuleContext);
-  console.log(selectedQuiz);
 
   const onSubmit = handleSubmit((data) => {
     const { name } = data;
+    createAuthRefreshInterceptor(axios, refreshAuthLogic);
     axios
-      .post(`http://localhost:5000/courses/${courseId}/quizzes`, {
+      .post(`${BASE_URL}/courses/${courseId}/quizzes`, {
         name
       })
       .then((res) => {

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../api";
 import { LoginContext } from "../../context";
 
 const Dropdown = () => {
@@ -11,11 +12,14 @@ const Dropdown = () => {
 
   const handleLogout = () => {
     axios
-      .delete("http://localhost:5000/auth/logout")
-      .then((res) => console.log(res))
+      .delete(`${BASE_URL}/auth/logout`)
+      // eslint-disable-next-line no-unused-vars
+      .then((res) => {
+        localStorage.removeItem("accessToken");
+        setUser({ accessToken: null });
+        alert("Successfully logged out!");
+      })
       .catch((err) => console.log(err));
-    localStorage.removeItem("accessToken");
-    setUser({ accessToken: null });
   };
 
   return (

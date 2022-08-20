@@ -4,7 +4,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchema } from "./validations/Validations";
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../api";
 
 interface FormValues {
   role: 0 | 1; // student: 0, instructor: 1
@@ -23,21 +24,21 @@ const Register = () => {
     formState: { errors }
   } = useForm<FormValues>({ resolver: yupResolver(validationSchema) });
 
-  const [selectedRole, setSelectedRole] = useState<number>(-1);
+  const [selectedRole, setSelectedRole] = useState<number>(0);
 
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data) => {
     const { name, email, password } = data;
     axios
-      .post("http://localhost:5000/auth/register", {
+      .post(`${BASE_URL}auth/register`, {
         role: selectedRole,
         name,
         email,
         password
       })
+      // eslint-disable-next-line no-unused-vars
       .then((res) => {
-        console.log(res);
         alert("Successfully registered your account! Please log in to continue using Pelajarin.");
         navigate("/login");
       })
@@ -112,7 +113,7 @@ const Register = () => {
                   inputName as "name" | "role" | "email" | "password" | "confirmPassword"
                 )}
               />
-              <p>{error}</p>
+              <p className="text-red-600">{error}</p>
             </div>
           ))}
           {/* Submit */}
@@ -125,6 +126,12 @@ const Register = () => {
           </div>
         </form>
       </div>
+      <p className="text-center mt-5">
+        Already have an account?{" "}
+        <Link to="/login" className="font-bold text-blue underline">
+          Log in here.
+        </Link>
+      </p>
     </div>
   );
 };
