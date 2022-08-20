@@ -8,11 +8,16 @@ import {
   Register,
   Login,
   InstructorDashboard,
+  StudentCourses,
+  StudentCourseDetail,
+  StudentDashboard,
   Page404,
   InstructorCourse,
+  InstructorQuiz,
+  StudentQuiz,
+  StudentQuizFeedback,
   AdminVerifyCourses,
-  AdminVerifyInstructors,
-  InstructorQuiz
+  AdminVerifyInstructors
 } from "../../pages";
 import { Course, User } from "../../typings";
 
@@ -54,7 +59,27 @@ const Router = () => {
                 path="/instructor/courses/:courseId/quizzes/:quizId"
                 element={<InstructorQuiz />}
               />
-
+              {/* Student */}
+              <Route
+                path="/student/dashboard"
+                element={user?.accessToken !== null ? <StudentDashboard /> : <Login />}
+              />
+              <Route
+                path="/student/courses"
+                element={user?.accessToken !== null ? <StudentCourses /> : <Login />}
+              />
+              <Route
+                path="/student/courses/:courseId"
+                element={user?.accessToken !== null ? <StudentCourseDetail /> : <Login />}
+              />
+              <Route
+                path="/student/courses/:courseId/quizzes/:quizId"
+                element={user?.accessToken !== null ? <StudentQuiz /> : <Login />}
+              />
+              <Route
+                path="/student/courses/:courseId/quizzes/:quizId/feedback"
+                element={user?.accessToken !== null ? <StudentQuizFeedback /> : <Login />}
+              />
               <Route path="*" element={<Page404 />} />
             </Routes>
             <Footer />
