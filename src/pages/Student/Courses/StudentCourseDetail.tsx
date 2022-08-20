@@ -53,7 +53,12 @@ const StudentCourseDetail = () => {
             });
           });
 
-          setLectures(tempLectures);
+          const sortedLectures = tempLectures.slice(0);
+          sortedLectures.sort((a, b) => {
+            return a.order - b.order;
+          });
+
+          setLectures(sortedLectures);
 
           const tempQuizzes: StudentQuizDetailInterface[] = [];
           course.quizzes.map((item: any) => {
@@ -65,7 +70,12 @@ const StudentCourseDetail = () => {
             });
           });
 
-          setQuizzes(tempQuizzes);
+          const sortedQuizzes = tempQuizzes.slice(0);
+          sortedQuizzes.sort((a, b) => {
+            return a.order - b.order;
+          });
+
+          setQuizzes(sortedQuizzes);
         })
         .catch(() => {
           alert("Error");
