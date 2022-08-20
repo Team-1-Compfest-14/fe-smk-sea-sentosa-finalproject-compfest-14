@@ -20,8 +20,8 @@ const ConfirmDeleteLectureModal = ({ handleBack }: ConfirmDeleteLectureModalProp
     createAuthRefreshInterceptor(axios, refreshAuthLogic);
     axios
       .delete(`${BASE_URL}/courses/${courseId}/lectures/${lectureId}`)
+      // eslint-disable-next-line no-unused-vars
       .then((res) => {
-        console.log(res.data);
         alert("Successfully deleted lecture!");
         window.location.reload();
         handleBack();
@@ -50,13 +50,13 @@ const ConfirmDeleteLectureModal = ({ handleBack }: ConfirmDeleteLectureModalProp
       <div className="flex flex-col mt-4 gap-2">
         <button
           onClick={handleDeleteLecture}
-          className="px-4 py-2 border border-red-600 rounded-lg text-red-600"
+          className="px-4 py-2 border border-red-600 rounded-lg text-red-600 hover:bg-red-600 hover:text-white hover:border-black"
         >
           Yes
         </button>
         <button
           onClick={() => handleBack()}
-          className="px-4 py-2 border border-black bg-blue rounded-lg text-white hover:bg-slate-200"
+          className="px-4 py-2 border border-black bg-blue rounded-lg text-white hover:bg-blue-dark"
         >
           Cancel
         </button>

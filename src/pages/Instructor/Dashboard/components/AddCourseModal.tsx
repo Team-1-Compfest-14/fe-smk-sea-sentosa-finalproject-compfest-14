@@ -78,7 +78,7 @@ const AddCourseModal = ({ handleBack }: AddCourseModalProp) => {
         <div className="flex flex-1 flex-col gap-2 mt-4">
           <input
             type="submit"
-            className="bg-blue text-white px-5 py-2 border border-black rounded-lg"
+            className="bg-blue text-white px-5 py-2 border border-black rounded-lg hover:bg-blue-dark"
             value="Add"
           />
           <button onClick={() => handleBack()} className="px-5 py-2 border border-black rounded-lg">

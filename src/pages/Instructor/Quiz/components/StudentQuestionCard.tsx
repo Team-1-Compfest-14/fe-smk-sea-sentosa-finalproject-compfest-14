@@ -3,15 +3,16 @@ import { MdDeleteForever, MdDragIndicator, MdModeEdit } from "react-icons/md";
 import { DraggableProvided } from "@hello-pangea/dnd";
 import { useContext } from "react";
 import { QuizContext } from "../../../../context";
+import { Question } from "../../../../typings";
 
 interface StudentQuestionCardProp {
   provided: DraggableProvided;
   index: number;
+  question: Question;
 }
 
-const StudentQuestionCard = ({ provided, index }: StudentQuestionCardProp) => {
-  const { selectedQuestion, setSelectedQuestion, setShowEditQuestionModal } =
-    useContext(QuizContext);
+const StudentQuestionCard = ({ provided, index, question }: StudentQuestionCardProp) => {
+  const { setSelectedQuestion, setShowEditQuestionModal } = useContext(QuizContext);
   return (
     <div
       className="bg-white border border-black rounded-xl px-8 py-4 flex flex-col gap-4 mt-4"
@@ -32,7 +33,7 @@ const StudentQuestionCard = ({ provided, index }: StudentQuestionCardProp) => {
           <div
             className="text-sm flex flex-col items-center justify-center cursor-pointer p-2 hover:bg-slate-200 hover:rounded-xl"
             onClick={() => {
-              setSelectedQuestion(selectedQuestion!);
+              setSelectedQuestion(question!);
               setShowEditQuestionModal(true);
             }}
           >
@@ -41,9 +42,9 @@ const StudentQuestionCard = ({ provided, index }: StudentQuestionCardProp) => {
           </div>
         </div>
       </div>
-      {/* Description */}
-      <p>{selectedQuestion?.question}</p>
-      {selectedQuestion?.questionOptions.map((option, index) => (
+      {/* Description and Options */}
+      <p>{question?.question}</p>
+      {question?.questionOptions.map((option, index) => (
         <div key={index} className="flex items-center gap-2">
           <input
             type="checkbox"

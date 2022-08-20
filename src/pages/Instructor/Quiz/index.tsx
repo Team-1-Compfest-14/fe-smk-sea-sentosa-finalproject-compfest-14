@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
 import { QuizContext } from "../../../context";
-import { Question } from "../../../typings";
+import { Quiz, Question } from "../../../typings";
 import {
   AddQuestionModal,
   CompactQuestionCard,
@@ -17,6 +17,7 @@ import createAuthRefreshInterceptor from "axios-auth-refresh";
 const InstructorQuiz = () => {
   const [questions, setQuestions] = useState<Question[] | null>(null);
   const { courseId, quizId } = useParams();
+  const [selectedQuiz, setSelectedQuiz] = useState<Quiz | null>(null);
   createAuthRefreshInterceptor(axios, refreshAuthLogic);
   const getQuestions = () => {
     axios
@@ -26,6 +27,15 @@ const InstructorQuiz = () => {
         setQuestions(questions);
       })
       .catch((err) => console.log(err));
+    axios
+      .get(`${BASE_URL}/courses/${courseId}/quizzes/instructor`)
+      .then((res) => {
+        const { quizzes } = res.data.data;
+        setSelectedQuiz(quizzes.filter((quiz: Quiz) => quiz.quiz.id.toString() == quizId)[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -81,11 +91,11 @@ const InstructorQuiz = () => {
                 navigate(-1);
               }}
               size={28}
-              className="bg-orange-light rounded-lg border border-black cursor-pointer"
+              className="bg-orange-light rounded-lg border border-black cursor-pointer hover:bg-orange-dark"
             />
-            Quiz 1 - Derivatives Practice
+            Quiz {selectedQuiz?.order! + 1} - {selectedQuiz?.name}
           </p>
-          <button className="bg-blue text-white px-4 py-2 rounded-lg border border-black">
+          <button className="bg-blue text-white px-4 py-2 rounded-lg border border-black hover:bg-blue-dark">
             Edit Name
           </button>
         </div>
@@ -109,40 +119,51 @@ const InstructorQuiz = () => {
           </button>
         </div>
         {/* Question Cards */}
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="questions">
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
-                {showCompactView
-                  ? questions?.map((question, index) => (
-                      <Draggable
-                        key={question.id}
-                        draggableId={question.id.toString()}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <CompactQuestionCard
-                            provided={provided}
-                            index={index}
-                            question={question}
-                          />
-                        )}
-                      </Draggable>
-                    ))
-                  : questions?.map((question, index) => (
-                      <Draggable
-                        key={question.id}
-                        draggableId={question.id.toString()}
-                        index={index}
-                      >
-                        {(provided) => <StudentQuestionCard provided={provided} index={index} />}
-                      </Draggable>
-                    ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+        {questions?.length! > 0 ? (
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="questions">
+              {(provided) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {showCompactView
+                    ? questions?.map((question, index) => (
+                        <Draggable
+                          key={question.id}
+                          draggableId={question.id.toString()}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <CompactQuestionCard
+                              provided={provided}
+                              index={index}
+                              question={question}
+                            />
+                          )}
+                        </Draggable>
+                      ))
+                    : questions?.map((question, index) => (
+                        <Draggable
+                          key={question.id}
+                          draggableId={question.id.toString()}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <StudentQuestionCard
+                              provided={provided}
+                              index={index}
+                              question={question}
+                            />
+                          )}
+                        </Draggable>
+                      ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        ) : (
+          <p className="text-center p-10 bg-black text-white rounded-lg">No questions added yet.</p>
+        )}
+
         {/* Add Item Button */}
         <div className="flex justify-end mt-8">
           <button

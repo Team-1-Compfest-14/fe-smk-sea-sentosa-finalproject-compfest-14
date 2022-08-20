@@ -51,8 +51,8 @@ const AddLectureModal = ({ handleBack }: AddLectureModalProp) => {
         name,
         lectureLink
       })
+      // eslint-disable-next-line no-unused-vars
       .then((res) => {
-        console.log(res.data);
         window.location.reload();
         alert("Successfully created a new lecture!");
         handleBack();
@@ -95,7 +95,7 @@ const AddLectureModal = ({ handleBack }: AddLectureModalProp) => {
           />
           <button
             onClick={() => handleBack()}
-            className="px-5 py-2 border border-black rounded-lg hover:bg-slate-200"
+            className="px-5 py-2 border border-black rounded-lg hover:bg-slate-200 hover:text-black"
           >
             Cancel
           </button>

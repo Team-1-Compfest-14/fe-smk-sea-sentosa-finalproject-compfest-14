@@ -51,7 +51,7 @@ const QuizCard = ({ provided, index, quiz }: QuizCardProp) => {
         <div
           className="text-sm flex flex-col items-center justify-center cursor-pointer p-2 hover:bg-slate-200 hover:rounded-xl"
           onClick={() => {
-            navigate("quizzes/1");
+            navigate(`quizzes/${quizId}`);
           }}
         >
           <MdModeEdit size={32} />

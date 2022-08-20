@@ -39,7 +39,6 @@ const AddQuestionModal = ({ handleBack }: AddQuestionModalProp) => {
   };
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data.options);
     if (numOfCorrectAnswers(data.options) !== 1) {
       setInvalidOptions(true);
       return;
