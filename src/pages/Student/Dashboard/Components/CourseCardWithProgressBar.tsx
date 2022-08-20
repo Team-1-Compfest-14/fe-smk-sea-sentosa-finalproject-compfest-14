@@ -12,7 +12,7 @@ const CourseCardWithProgressBar = ({
   courseId
 }: enrolledCourses) => {
   function countProgressBar() {
-    return (totalModuleCompletion / totalModule) * 100;
+    return Math.round((totalModuleCompletion / totalModule) * 100);
   }
 
   const progressStyle = {

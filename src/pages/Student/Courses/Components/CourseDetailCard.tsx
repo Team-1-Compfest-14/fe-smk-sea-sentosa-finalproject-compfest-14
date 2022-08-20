@@ -20,7 +20,7 @@ const CourseDetailCard = ({
           <IoChevronBack
             size={40}
             className="bg-white rounded-lg border border-black mr-10 p-1 hover:bg-slate-200 cursor-pointer"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/student/dashboard")}
           />
           {name}
         </p>

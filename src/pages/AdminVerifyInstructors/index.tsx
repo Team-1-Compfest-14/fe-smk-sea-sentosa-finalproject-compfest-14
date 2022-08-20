@@ -1,6 +1,7 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import React, { useEffect, useState } from "react";
+import { BASE_URL } from "../../api";
 
 function AdminVerifyInstructors() {
   const [instructors, setInstructors]: any = useState([]);
@@ -14,7 +15,7 @@ function AdminVerifyInstructors() {
       const currentDate = new Date();
       if (expire * 1000 < currentDate.getTime()) {
         // expired access token
-        const response = await axios.post("http://localhost:8080/auth/refresh");
+        const response = await axios.post(`${BASE_URL}/auth/refresh`);
         const { accessToken } = response.data.data;
         config.headers.Authorization = `Bearer ${accessToken}`;
         setToken(accessToken);
@@ -30,7 +31,7 @@ function AdminVerifyInstructors() {
   );
 
   const getUnverifiedInstructor = async () => {
-    const response = await axiosJWT.get("http://localhost:8080/approval/users", {
+    const response = await axiosJWT.get(`${BASE_URL}/approval/users`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -42,7 +43,7 @@ function AdminVerifyInstructors() {
 
   const approveHandlingData = async (event: any, userId: any, status: any) => {
     await axiosJWT.post(
-      `http://localhost:8080/approval/users/${userId}`,
+      `${BASE_URL}/approval/users/${userId}`,
       { approved: status },
       {
         headers: {
@@ -50,7 +51,7 @@ function AdminVerifyInstructors() {
         }
       }
     );
-    const response = await axiosJWT.get("http://localhost:8080/approval/users", {
+    const response = await axiosJWT.get(`${BASE_URL}/approval/users`, {
       headers: {
         Authorization: `Bearer ${token}`
       }

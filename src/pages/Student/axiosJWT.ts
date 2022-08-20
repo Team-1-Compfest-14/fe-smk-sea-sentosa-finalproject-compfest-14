@@ -1,5 +1,6 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import { BASE_URL } from "../../api";
 
 const axiosJWT = axios.create();
 axiosJWT.interceptors.request.use(
@@ -12,7 +13,7 @@ axiosJWT.interceptors.request.use(
 
     if (exp * 1000 < currentDate.getTime()) {
       await axios
-        .post("http://localhost:5000/auth/refresh")
+        .post(`${BASE_URL}/auth/refresh`)
         .then((response) => {
           const { accessToken } = response.data.data;
           config.headers.Authorization = `Bearer ${accessToken}`;

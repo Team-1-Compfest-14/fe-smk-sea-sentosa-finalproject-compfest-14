@@ -5,9 +5,8 @@ import { useContext, useEffect, useState } from "react";
 import { AddCourseModal, ConfirmDeleteCourseModal } from "./components";
 import { CourseContext } from "../../../context";
 import { Course, UserDetails } from "../../../typings";
-import { BASE_URL } from "../../../api";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
-import { refreshAuthLogic } from "../../../api";
+import { BASE_URL, refreshAuthLogic } from "../../../api";
 
 const InstructorDashboard = () => {
   const { setCourses, selectedCourse } = useContext(CourseContext);

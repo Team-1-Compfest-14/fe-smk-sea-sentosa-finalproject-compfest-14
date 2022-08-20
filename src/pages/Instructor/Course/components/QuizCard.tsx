@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import { MdDeleteForever, MdDragIndicator, MdModeEdit } from "react-icons/md";
-import { DraggableProvided } from "@hello-pangea/dnd";
 import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { ModuleContext } from "../../../../context";
@@ -9,12 +8,11 @@ import { Quiz, QuizData } from "../../../../typings";
 import { BASE_URL } from "../../../../api";
 
 interface QuizCardProp {
-  provided: DraggableProvided;
   index: number;
   quiz: Quiz;
 }
 
-const QuizCard = ({ provided, index, quiz }: QuizCardProp) => {
+const QuizCard = ({ index, quiz }: QuizCardProp) => {
   const navigate = useNavigate();
   const { setSelectedQuiz, setShowConfirmDeleteQuizModal } = useContext(ModuleContext);
   const { id: courseId } = useParams();
@@ -31,12 +29,7 @@ const QuizCard = ({ provided, index, quiz }: QuizCardProp) => {
       .catch((err) => console.log(err));
   }, []);
   return (
-    <div
-      className="bg-white border border-black rounded-xl px-8 py-2 flex items-center justify-between mt-4"
-      ref={provided.innerRef}
-      {...provided.draggableProps}
-      {...provided.dragHandleProps}
-    >
+    <div className="bg-white border border-black rounded-xl px-8 py-2 flex items-center justify-between mt-4">
       {/* Drag Icon, Title, and Details */}
       <div className="flex items-center gap-5">
         <MdDragIndicator size={32} />

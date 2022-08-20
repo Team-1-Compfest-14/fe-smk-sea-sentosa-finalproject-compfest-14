@@ -15,7 +15,7 @@ const Navbar = () => {
         <Logo />
 
         {/* Menu */}
-        <div className="items-center justify-evenly hidden md:flex">
+        <div className="flex items-center justify-evenly">
           {role === 0 ? (
             <>
               <MenuOption text="My Courses" route="/student/dashboard" />

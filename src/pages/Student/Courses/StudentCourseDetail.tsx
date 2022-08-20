@@ -100,7 +100,7 @@ const StudentCourseDetail = () => {
         .post(`${BASE_URL}/courses/lectures/${lectureId}/complete`, {
           lectureId
         })
-        .then((res) => console.log(res))
+        .then(() => window.location.reload())
         .catch((err) => console.log(err));
     }
     window.open(lectureLink, "_blank");

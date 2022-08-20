@@ -1,27 +1,20 @@
 /* eslint-disable no-unused-vars */
 import { MdDeleteForever, MdDragIndicator, MdModeEdit } from "react-icons/md";
 import { AiOutlineEye } from "react-icons/ai";
-import { DraggableProvided } from "@hello-pangea/dnd";
 import { useContext } from "react";
 import { ModuleContext } from "../../../../context";
 import { Lecture } from "../../../../typings";
 
 interface LectureCardProp {
-  provided: DraggableProvided;
   index: number;
   lecture: Lecture;
 }
 
-const LectureCard = ({ provided, index, lecture }: LectureCardProp) => {
+const LectureCard = ({ index, lecture }: LectureCardProp) => {
   const { setSelectedLecture, setShowEditLectureModal, setShowConfirmDeleteLectureModal } =
     useContext(ModuleContext);
   return (
-    <div
-      className="bg-white border border-black rounded-xl px-8 py-2 flex items-center justify-between mt-4"
-      ref={provided.innerRef}
-      {...provided.draggableProps}
-      {...provided.dragHandleProps}
-    >
+    <div className="bg-white border border-black rounded-xl px-8 py-2 flex items-center justify-between mt-4">
       {/* Drag Icon and Title */}
       <div className="flex items-center gap-5">
         <MdDragIndicator size={32} />

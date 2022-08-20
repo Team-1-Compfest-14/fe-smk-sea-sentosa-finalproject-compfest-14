@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CourseContext, LoginContext } from "../../context";
@@ -25,7 +24,6 @@ const Router = () => {
   const [user, setUser] = useState<User>({
     accessToken: localStorage.getItem("accessToken") ?? null
   });
-  axios.defaults.headers.common["Authorization"] = `Bearer ${user?.accessToken}`;
 
   const [courses, setCourses] = useState<Course[] | null>(null);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);

@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect } from "react";
 import { useDocumentTitle } from "../../../hooks";
-import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import {
   AddLectureModal,
   EditLectureModal,
@@ -41,7 +40,9 @@ const InstructorCourse = () => {
       .get(`${BASE_URL}/courses/instructor/own/${courseId}/lectures`)
       .then((res) => {
         const { lectures } = res.data.data;
-        setLectures(lectures);
+        const sortedLectures = lectures.sort((a: Lecture, b: Lecture) => a.order < b.order);
+        console.log("sortedLectures ", sortedLectures);
+        setLectures(sortedLectures);
       })
       .catch((err) => console.log(err));
     // Get instructor's course quizzes
@@ -93,28 +94,6 @@ const InstructorCourse = () => {
     }
   };
 
-  const onDragEnd = ({ destination, source }: DropResult) => {
-    if (!destination) return;
-    if (destination.droppableId === source.droppableId && destination.index === source.index)
-      return;
-    if (showLectures) {
-      const items = Array.from(lectures!);
-      const moved = items[source.index];
-      items.splice(source.index, 1);
-      items.splice(destination.index, 0, moved);
-      moved.order = destination.index;
-      setLectures(items);
-      // axios.put("http://localhost:5000/courses/:courseId/modules/:moduleId/lectures");
-    } else {
-      const items = Array.from(quizzes!);
-      const moved = items[source.index];
-      items.splice(source.index, 1);
-      items.splice(destination.index, 0, moved);
-      moved.order = destination.index;
-      setQuizzes(items);
-    }
-  };
-
   return (
     <ModuleContext.Provider
       value={{
@@ -154,40 +133,25 @@ const InstructorCourse = () => {
           </button>
         </div>
         {/* Lecture or Quizzes Cards */}
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="lectures">
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
-                {showLectures ? (
-                  lectures?.length! > 0 ? (
-                    lectures?.map((lecture, index) => (
-                      <Draggable key={lecture.id} draggableId={lecture.id.toString()} index={index}>
-                        {(provided) => (
-                          <LectureCard provided={provided} index={index} lecture={lecture} />
-                        )}
-                      </Draggable>
-                    ))
-                  ) : (
-                    <p className="text-center p-10 bg-black text-white rounded-lg">
-                      No lectures added yet.
-                    </p>
-                  )
-                ) : quizzes?.length! > 0 ? (
-                  quizzes?.map((quiz, index) => (
-                    <Draggable key={quiz.id} draggableId={quiz.id.toString()} index={index}>
-                      {(provided) => <QuizCard provided={provided} index={index} quiz={quiz} />}
-                    </Draggable>
-                  ))
-                ) : (
-                  <p className="text-center p-10 bg-black text-white rounded-lg">
-                    No quizzes added yet.
-                  </p>
-                )}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+
+        <div>
+          {showLectures ? (
+            lectures?.length! > 0 ? (
+              lectures?.map((lecture, index) => (
+                <LectureCard key={index} index={index} lecture={lecture} />
+              ))
+            ) : (
+              <p className="text-center p-10 bg-black text-white rounded-lg">
+                No lectures added yet.
+              </p>
+            )
+          ) : quizzes?.length! > 0 ? (
+            quizzes?.map((quiz, index) => <QuizCard key={index} index={index} quiz={quiz} />)
+          ) : (
+            <p className="text-center p-10 bg-black text-white rounded-lg">No quizzes added yet.</p>
+          )}
+        </div>
+
         {/* Add Item Button */}
         <div className="flex justify-end mt-8">
           <button

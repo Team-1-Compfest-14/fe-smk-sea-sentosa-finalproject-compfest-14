@@ -13,8 +13,7 @@ const Dropdown = () => {
   const handleLogout = () => {
     axios
       .delete(`${BASE_URL}/auth/logout`)
-      // eslint-disable-next-line no-unused-vars
-      .then((res) => {
+      .then(() => {
         localStorage.removeItem("accessToken");
         setUser({ accessToken: null });
         alert("Successfully logged out!");
