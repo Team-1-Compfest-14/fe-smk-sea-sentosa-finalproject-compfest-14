@@ -45,7 +45,7 @@ const StudentCourseDetail = () => {
 
           course.lectures.map((item: any) => {
             tempLectures.push({
-              id: item.lecture.id,
+              id: item.lecture.lecture.id,
               name: item.lecture.name,
               order: item.lecture.order,
               lectureLink: item.lecture.lecture.lectureLink,
