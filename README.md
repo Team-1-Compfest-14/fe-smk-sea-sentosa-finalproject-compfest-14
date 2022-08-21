@@ -22,12 +22,12 @@ Backend: https://sea-team-1.herokuapp.com/
    yarn dev
    ```
 1. Clone the repo frontend
-2. Install dependencies
-3. Run the server
+1. Install dependencies
+1. Run the server
   ```
   yarn start
   ```
-4. Go to frontend repo and follow the step for running, https://github.com/Team-1-Compfest-14/fe-smk-sea-sentosa-finalproject-compfest-14
+1. Go to frontend repo and follow the step for running, https://github.com/Team-1-Compfest-14/fe-smk-sea-sentosa-finalproject-compfest-14
 
 ## Technology Used
 - React
