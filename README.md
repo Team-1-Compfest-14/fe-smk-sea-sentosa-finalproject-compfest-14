@@ -27,7 +27,7 @@ Backend: https://sea-team-1.herokuapp.com/
   ```
   yarn start
   ```
-1. Go to frontend repo and follow the step for running, https://github.com/Team-1-Compfest-14/fe-smk-sea-sentosa-finalproject-compfest-14
+10. Go to frontend repo and follow the step for running, https://github.com/Team-1-Compfest-14/fe-smk-sea-sentosa-finalproject-compfest-14
 
 ## Technology Used
 - React
